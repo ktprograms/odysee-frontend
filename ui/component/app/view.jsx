@@ -88,6 +88,7 @@ type Props = {
   myChannelClaimIds: ?Array<string>,
   hasPremiumPlus: ?boolean,
   setIncognito: (boolean) => void,
+  doChannelStatus: (boolean) => Promise<Array<string>>,
   fetchModBlockedList: () => void,
   fetchModAmIList: () => void,
   homepageFetched: boolean,
@@ -121,6 +122,7 @@ function App(props: Props) {
     myChannelClaimIds,
     activeChannelClaim,
     setIncognito,
+    doChannelStatus,
     fetchModBlockedList,
     hasPremiumPlus,
     fetchModAmIList,
@@ -322,13 +324,20 @@ function App(props: Props) {
     if (hasNoChannels) {
       setIncognito(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setIncognito]);
 
+  useEffect(() => {
     if (hasMyChannels) {
       fetchModBlockedList();
       fetchModAmIList();
+      doChannelStatus(false).then((needToSign: Array<string>) => {
+        if (needToSign.length !== 0) {
+          doChannelStatus(true);
+        }
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setIncognito]);
+  }, [hasMyChannels, fetchModBlockedList, fetchModAmIList, doChannelStatus]);
 
   useEffect(() => {
     // $FlowFixMe
