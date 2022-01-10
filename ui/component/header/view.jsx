@@ -45,6 +45,7 @@ type Props = {
   sidebarOpen: boolean,
   syncError: ?string,
   totalBalance?: number,
+  user: ?User,
   prefsReady: boolean,
   doClearClaimSearch: () => void,
   clearEmailEntry: () => void,
@@ -68,6 +69,7 @@ const Header = (props: Props) => {
     sidebarOpen,
     syncError,
     totalBalance,
+    user,
     prefsReady,
     doClearClaimSearch,
     clearEmailEntry,
@@ -172,6 +174,7 @@ const Header = (props: Props) => {
       ) : !isMobile ? (
         <div className="header__authButtons">
           <UserOAuthButton />
+          <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} disabled={user === null} />
         </div>
       ) : (
         <HeaderProfileMenuButton />
