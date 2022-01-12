@@ -163,12 +163,7 @@ function PrivateRoute(props: PrivateRouteProps) {
         (keycloak && keycloak.authenticated) || !IS_WEB ? (
           <Component {...props} />
         ) : (
-          <Redirect
-            to={{
-              pathname: `/$/${PAGES.AUTH_SIGNIN}?redirect=${redirectUrl || props.location.pathname}`,
-              state: { from: props.location },
-            }}
-          />
+          <Redirect to={`/$/${PAGES.AUTH_SIGNIN}?redirect=${redirectUrl || props.location.pathname}`} />
         )
       }
     />
@@ -334,6 +329,7 @@ function AppRouter(props: Props) {
         {categoryPages}
 
         <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
+        <Route path={`/$/${PAGES.AUTH_SIGNIN}/*`} exact component={SignInPage} />
         <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
         <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
         <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
