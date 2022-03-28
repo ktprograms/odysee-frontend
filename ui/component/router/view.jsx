@@ -77,6 +77,9 @@ const LivestreamCurrentPage = lazyImport(() =>
 const OdyseeMembershipPage = lazyImport(() =>
   import('page/odyseeMembership' /* webpackChunkName: "odyseeMembership" */)
 );
+const OdyseeMembershipsPage = lazyImport(() =>
+  import('page/odyseeMemberships' /* webpackChunkName: "odyseeMembership" */)
+);
 const OwnComments = lazyImport(() => import('page/ownComments' /* webpackChunkName: "ownComments" */));
 const PasswordResetPage = lazyImport(() => import('page/passwordReset' /* webpackChunkName: "passwordReset" */));
 const PasswordSetPage = lazyImport(() => import('page/passwordSet' /* webpackChunkName: "passwordSet" */));
@@ -372,6 +375,7 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />
         <PrivateRoute {...props} path={`/$/${PAGES.ODYSEE_MEMBERSHIP}`} component={OdyseeMembershipPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.ODYSEE_MEMBERSHIPS}`} component={OdyseeMembershipsPage} />
 
         <Route path={`/$/${PAGES.POPOUT}/:channelName/:streamName`} component={PopoutChatPage} />
 

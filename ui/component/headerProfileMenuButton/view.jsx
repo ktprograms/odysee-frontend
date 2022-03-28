@@ -57,6 +57,7 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
               <HeaderMenuLink page={PAGES.REWARDS} icon={ICONS.REWARDS} name={__('Rewards')} />
               <HeaderMenuLink page={PAGES.INVITE} icon={ICONS.INVITE} name={__('Invites')} />
               <HeaderMenuLink page={PAGES.ODYSEE_MEMBERSHIP} icon={ICONS.UPGRADE} name={__('Odysee Premium')} />
+              <HeaderMenuLink page={PAGES.ODYSEE_MEMBERSHIPS} icon={ICONS.UPGRADE} name={__('Odysee Memberships')} />
 
               <MenuItem onSelect={signOut}>
                 <div className="menu__link">
