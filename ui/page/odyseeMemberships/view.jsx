@@ -5,8 +5,19 @@ import Page from 'component/page';
 import { getStripeEnvironment } from 'util/stripe';
 import * as ICONS from 'constants/icons';
 import Button from 'component/button';
+import { useHistory } from 'react-router';
+import * as PAGES from 'constants/pages';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 
 let stripeEnvironment = getStripeEnvironment();
+
+const TAB_QUERY = 'tab';
+
+const TABS = {
+  CREATE_TIERS: 'tiers',
+  PAYOUT: 'payout',
+  BALANCE: 'balance',
+};
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -18,6 +29,46 @@ type Props = {
 };
 
 const MembershipsPage = (props: Props) => {
+
+  const {
+    location: { search },
+    push,
+  } = useHistory();
+
+  const urlParams = new URLSearchParams(search);
+
+  // if tiers are saved, then go to balance, otherwise go to tiers
+  const currentView = urlParams.get(TAB_QUERY) || TABS.CREATE_TIERS;
+
+  let tabIndex;
+  switch (currentView) {
+    case TABS.CREATE_TIERS:
+      tabIndex = 0;
+      break;
+    case TABS.PAYOUT:
+      tabIndex = 1;
+      break;
+    case TABS.BALANCE:
+      tabIndex = 2;
+      break;
+    default:
+      tabIndex = 0;
+      break;
+  }
+
+  function onTabChange(newTabIndex) {
+    let url = `/$/${PAGES.CREATOR_MEMBERSHIPS}?`;
+
+    if (newTabIndex === 0) {
+      url += `${TAB_QUERY}=${TABS.CREATE_TIERS}`;
+    } else if (newTabIndex === 1) {
+      url += `${TAB_QUERY}=${TABS.PAYOUT}`;
+    } else if (newTabIndex === 2) {
+      url += `${TAB_QUERY}=${TABS.BALANCE}`;
+    }
+    push(url);
+  }
+
   const {
 
   } = props;
@@ -61,66 +112,83 @@ const MembershipsPage = (props: Props) => {
 
   const [isEditing, setIsEditing] = React.useState(false);
 
+  const createTiers = (
+    <div className="create-tiers-div">
+      <div className="memberships-header" style={{ marginBottom: 'var(--spacing-xl)'}}>
+        <h1 style={{ fontSize: '24px', marginBottom: 'var(--spacing-s)' }}>Create Your Membership Tiers</h1>
+        <h2 style={{ fontSize: '18px' }}>Here you will be able to define the tiers that your viewers can subscribe to</h2>
+      </div>
+
+      {defaultTiers.map((tier, i) => (
+        <>
+          <div style={{ marginBottom: 'var(--spacing-xxl)'}}>
+            <div style={{ marginBottom: 'var(--spacing-s)'}}>Tier Name: {tier.displayName}</div>
+            <h1 style={{ marginBottom: 'var(--spacing-s)'}}>{tier.description}</h1>
+            <h1 style={{ marginBottom: 'var(--spacing-s)'}}>Monthly Pledge: ${tier.monthlyContributionInUSD}</h1>
+            {tier.perks.map((tierPerk, i) => (
+              <>
+                <p>
+                  {perkDescriptions.map((globalPerk, i) => (
+                    <>
+                      {tierPerk === globalPerk.perkName && (
+                        <>
+                          <ul>
+                            <li>
+                              {globalPerk.perkDescription}
+                            </li>
+                          </ul>
+                        </>
+                      )}
+                    </>
+                  ))}
+                </p>
+              </>
+            ))}
+            {/* cancel membership button */}
+            <Button
+              button="alt"
+              // onClick={(e) => cancelMembership(e, membership)}
+              className="cancel-membership-button"
+              label={__('Edit Tier')}
+              icon={ICONS.EDIT}
+            />
+            {/* cancel membership button */}
+            <Button
+              button="alt"
+              // onClick={(e) => cancelMembership(e, membership)}
+              className="cancel-membership-button"
+              label={__('Delete Tier')}
+              icon={ICONS.DELETE}
+            />
+          </div>
+        </>
+      ))}
+    </div>
+  );
+
   return (
     <>
       <Page className="premium-wrapper">
-        <div className="memberships-header" style={{ marginBottom: 'var(--spacing-xl)'}}>
-          <h1 style={{ fontSize: '24px', marginBottom: 'var(--spacing-s)' }}>Create Your Membership Tiers</h1>
-          <h2 style={{ fontSize: '18px' }}>Here you will be able to define the tiers that your viewers can subscribe to</h2>
-        </div>
-
-        {defaultTiers.map((tier, i) => (
-          <>
-            <div style={{ marginBottom: 'var(--spacing-xxl)'}}>
-              <div style={{ marginBottom: 'var(--spacing-s)'}}>Tier Name: {tier.displayName}</div>
-              <h1 style={{ marginBottom: 'var(--spacing-s)'}}>{tier.description}</h1>
-              <h1 style={{ marginBottom: 'var(--spacing-s)'}}>Monthly Pledge: ${tier.monthlyContributionInUSD}</h1>
-              {tier.perks.map((tierPerk, i) => (
-                <>
-                  <p>
-                    {perkDescriptions.map((globalPerk, i) => (
-                      <>
-                        {tierPerk === globalPerk.perkName && (
-                          <>
-                            <ul>
-                              <li>
-                                {globalPerk.perkDescription}
-                              </li>
-                            </ul>
-                          </>
-                        )}
-                      </>
-                    ))}
-                  </p>
-                </>
-              ))}
-              {/* cancel membership button */}
-              <Button
-                button="alt"
-                // onClick={(e) => cancelMembership(e, membership)}
-                className="cancel-membership-button"
-                label={__('Edit Tier')}
-                icon={ICONS.EDIT}
-              />
-              {/* cancel membership button */}
-              <Button
-                button="alt"
-                // onClick={(e) => cancelMembership(e, membership)}
-                className="cancel-membership-button"
-                label={__('Delete Tier')}
-                icon={ICONS.DELETE}
-              />
-            </div>
-          </>
-        ))}
-        <Button
-          button="alt"
-          // onClick={(e) => cancelMembership(e, membership)}
-          className="cancel-membership-button"
-          label={__('Delete Tier')}
-          icon={ICONS.DELETE}
-        />
-
+        <Tabs onChange={onTabChange} index={tabIndex}>
+          <TabList className="tabs__list--collection-edit-page">
+            <Tab>{__('Create Tiers')}</Tab>
+            <Tab>{__('Payout Options')}</Tab>
+            <Tab>{__('Supporters')}</Tab>
+          </TabList>
+          <TabPanels>
+            {/* balances for lbc and fiat */}
+            <TabPanel>
+              {createTiers}
+            </TabPanel>
+            {/* transactions panel */}
+            <TabPanel>
+              <h1>Payout Options</h1>
+            </TabPanel>
+            <TabPanel>
+              <h1>Supporters</h1>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </Page>
     </>
   );

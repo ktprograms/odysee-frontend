@@ -42,7 +42,7 @@ export const PAGE_TITLE = {
   [PAGES.LIVESTREAM_CURRENT]: 'Live (Experimental)',
   [PAGES.NOTIFICATIONS]: 'Notifications',
   [PAGES.ODYSEE_PREMIUM]: 'Odysee Premium',
-  [PAGES.ODYSEE_MEMBERSHIPS]: 'Creator Memberships',
+  [PAGES.CREATOR_MEMBERSHIPS]: 'Creator Memberships',
   [PAGES.PRIVACY_POLICY]: 'Privacy Policy',
   [PAGES.RECEIVE]: 'Your address',
   [PAGES.REPORT]: 'Report an issue or request a feature',

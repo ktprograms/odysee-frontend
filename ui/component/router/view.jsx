@@ -375,7 +375,7 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />
         <PrivateRoute {...props} path={`/$/${PAGES.ODYSEE_PREMIUM}`} component={OdyseeMembershipPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.ODYSEE_MEMBERSHIPS}`} component={OdyseeMembershipsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_MEMBERSHIPS}`} component={OdyseeMembershipsPage} />
 
         <Route path={`/$/${PAGES.POPOUT}/:channelName/:streamName`} component={PopoutChatPage} />
 
