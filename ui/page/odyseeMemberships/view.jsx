@@ -75,19 +75,16 @@ const MembershipsPage = (props: Props) => {
   }
 
   let membershipTiers = [{
-    index: 0,
     displayName: 'Helping Hand',
     description: 'You\'re doing your part, thank you!',
     monthlyContributionInUSD: 5,
     perks: ['exclusiveAccess', 'badge'],
   }, {
-    index: 1,
     displayName: 'Big-Time Supporter',
     description: 'You are a true fan and are helping in a big way!',
     monthlyContributionInUSD: 10,
     perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis'],
   }, {
-    index: 2,
     displayName: 'Community MVP',
     description: 'Where would this creator be without you? You are a true legend!',
     monthlyContributionInUSD: 20,
@@ -117,9 +114,11 @@ const MembershipsPage = (props: Props) => {
 
   const [editTierDescription, setEditTierDescription] = React.useState('');
 
-  const editMembership = function (e, tierName, tierDescription) {
+  const editMembership = function (e, tierIndex, tierDescription) {
+
+    log(tierIndex)
     setEditTierDescription(tierDescription);
-    setIsEditing(tierName);
+    setIsEditing(tierIndex);
   };
 
   const deleteMembership = function (tierIndex) {
@@ -136,6 +135,24 @@ const MembershipsPage = (props: Props) => {
     setCreatorMemberships(membershipsBeforeDeletion)
   };
 
+  const addMembership = function () {
+    const newMembership = {
+      displayName: 'New Membership Tier',
+      description: 'Here\'s your 4th added tier. You can add one more.',
+      monthlyContributionInUSD: 5,
+      perks: ['exclusiveAccess', 'badge'],
+    };
+
+    console.log(creatorMemberships);
+
+    const newFirjoa = creatorMemberships.push(newMembership);
+    log(newFirjoa);
+
+    // setCreatorMemberships(creatorMemberships.push(newMembership));
+
+
+  };
+
   const handleChange = (event) => {
     setEditTierDescription(event.target.value);
   };
@@ -145,7 +162,15 @@ const MembershipsPage = (props: Props) => {
   };
 
   function saveMembership(tierIndex) {
-    const matchingMembershipByIndex = membershipTiers.findIndex(m => m.index === tierIndex);
+
+    log(tierIndex)
+    console.log(creatorMemberships);
+
+    const matchingMembershipByIndex = creatorMemberships[tierIndex];
+
+    const copyOfMemberships = creatorMemberships;
+
+    log(matchingMembershipByIndex);
 
     const newTierName = document.querySelectorAll('input[name=tier_name]')[0]?.value;
     const newTierDescription = editTierDescription;
@@ -160,18 +185,16 @@ const MembershipsPage = (props: Props) => {
 
     console.log(newObject);
 
-    membershipTiers[matchingMembershipByIndex] = newObject;
+    copyOfMemberships[tierIndex] = newObject;
 
-    setCreatorMemberships(membershipTiers)
+    log(copyOfMemberships);
+
+    setCreatorMemberships(copyOfMemberships);
 
     setIsEditing(false);
-
-    console.log(matchingMembershipByIndex);
-
-    console.log(membershipTiers);
   }
 
-  function createEditTier(tier) {
+  function createEditTier(tier, membershipIndex) {
     return (
       <div className="edit-div" style={{ marginBottom: '45px' }}>
         <FormField
@@ -180,6 +203,7 @@ const MembershipsPage = (props: Props) => {
           label={__('Tier Name')}
           defaultValue={tier.displayName}
         />
+        {/* could be cool to have markdown */}
         {/*<FormField*/}
         {/*  type="markdown"*/}
         {/*  name="tier_description"*/}
@@ -206,7 +230,7 @@ const MembershipsPage = (props: Props) => {
           onChange={(event) => parseFloat(event.target.value)}
         />
         <div className="section__actions">
-          <Button button="primary" label={'Save Tier'} onClick={() => saveMembership(tier.index)} />
+          <Button button="primary" label={'Save Tier'} onClick={() => saveMembership(membershipIndex)} />
           <Button button="link" label={__('Cancel')} onClick={cancelEditingMembership} />
         </div>
       </div>
@@ -224,12 +248,12 @@ const MembershipsPage = (props: Props) => {
       {/* list through different tiers */}
       {creatorMemberships.map((membershipTier, membershipIndex) => (
         <>
-          {isEditing === membershipTier.index && (
+          {isEditing === membershipIndex && (
             <>
-              {createEditTier(membershipTier)}
+              {createEditTier(membershipTier, membershipIndex)}
             </>
           )}
-          {isEditing !== membershipTier.index && (
+          {isEditing !== membershipIndex && (
             <div style={{ marginBottom: 'var(--spacing-xxl)'}}>
               <div style={{ marginBottom: 'var(--spacing-s)'}}>Tier Name: {membershipTier.displayName}</div>
               <h1 style={{ marginBottom: 'var(--spacing-s)'}}>{membershipTier.description}</h1>
@@ -256,8 +280,8 @@ const MembershipsPage = (props: Props) => {
               {/* cancel membership button */}
               <Button
                 button="alt"
-                onClick={(e) => editMembership(e, membershipTier.index, membershipTier.description)}
-                className="cancel-membership-button"
+                onClick={(e) => editMembership(e, membershipIndex, membershipTier.description)}
+                className="edit-membership-button"
                 label={__('Edit Tier')}
                 icon={ICONS.EDIT}
               />
@@ -273,6 +297,14 @@ const MembershipsPage = (props: Props) => {
           )}
         </>
       ))}
+
+      <Button
+        button="alt"
+        onClick={(e) => addMembership()}
+        className="add-membership-button"
+        label={__('Add Tier')}
+        icon={ICONS.ADD}
+      />
     </div>
   );
 
