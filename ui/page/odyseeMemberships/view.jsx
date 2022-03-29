@@ -74,22 +74,22 @@ const MembershipsPage = (props: Props) => {
     push(url);
   }
 
-  const defaultTiers = [{
-    index: 1,
+  let membershipTiers = [{
+    index: 0,
     name: 'helping-hand',
     displayName: 'Helping Hand',
     description: 'You\'re doing your part, thank you!',
     monthlyContributionInUSD: 5,
     perks: ['exclusiveAccess', 'badge'],
   }, {
-    index: 2,
+    index: 1,
     name: 'big-time-supporter',
     displayName: 'Big-Time Supporter',
     description: 'You are a true fan and are helping in a big way!',
     monthlyContributionInUSD: 10,
     perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis'],
   }, {
-    index: 3,
+    index: 2,
     name: 'community-mvp',
     displayName: 'Community MVP',
     description: 'Where would this creator be without you? You are a true legend!',
@@ -116,6 +116,8 @@ const MembershipsPage = (props: Props) => {
 
   const [isEditing, setIsEditing] = React.useState(false);
 
+  const [creatorMemberships, setCreatorMemberships] = React.useState(membershipTiers);
+
   const editMembership = function (e, tierName) {
     setIsEditing(tierName);
   };
@@ -123,6 +125,28 @@ const MembershipsPage = (props: Props) => {
   const cancelEditingMembership = function () {
     setIsEditing(false);
   };
+
+  function saveMembership(tierIndex) {
+    const matchingMembershipByIndex = membershipTiers.findIndex(m => m.index === tierIndex);
+
+    const newObject = {
+      name: 'community-mvp',
+      displayName: 'Community MVP',
+      description: 'Where would this creator be without you? You are a true legend!',
+      monthlyContributionInUSD: 20,
+      perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis', 'custom-badge'],
+    };
+
+    membershipTiers[matchingMembershipByIndex] = newObject;
+
+    setCreatorMemberships(membershipTiers)
+
+    setIsEditing(false);
+
+    console.log(matchingMembershipByIndex);
+
+    console.log(membershipTiers);
+  }
 
   function createEditTier(tier) {
     return (
@@ -149,7 +173,7 @@ const MembershipsPage = (props: Props) => {
           value={tier.monthlyContributionInUSD}
         />
         <div className="section__actions">
-          <Button button="primary" label={'Save Tier'} />
+          <Button button="primary" label={'Save Tier'} onClick={() => saveMembership(tier.index)} />
           <Button button="link" label={__('Cancel')} onClick={cancelEditingMembership} />
         </div>
       </div>
@@ -165,19 +189,19 @@ const MembershipsPage = (props: Props) => {
       </div>
 
       {/* list through different tiers */}
-      {defaultTiers.map((defaultTier, i) => (
+      {creatorMemberships.map((membershipTier, i) => (
         <>
-          {isEditing === defaultTier.index && (
+          {isEditing === membershipTier.index && (
             <>
-              {createEditTier(defaultTier)}
+              {createEditTier(membershipTier)}
             </>
           )}
-          {isEditing !== defaultTier.index && (
+          {isEditing !== membershipTier.index && (
             <div style={{ marginBottom: 'var(--spacing-xxl)'}}>
-              <div style={{ marginBottom: 'var(--spacing-s)'}}>Tier Name: {defaultTier.displayName}</div>
-              <h1 style={{ marginBottom: 'var(--spacing-s)'}}>{defaultTier.description}</h1>
-              <h1 style={{ marginBottom: 'var(--spacing-s)'}}>Monthly Pledge: ${defaultTier.monthlyContributionInUSD}</h1>
-              {defaultTier.perks.map((tierPerk, i) => (
+              <div style={{ marginBottom: 'var(--spacing-s)'}}>Tier Name: {membershipTier.displayName}</div>
+              <h1 style={{ marginBottom: 'var(--spacing-s)'}}>{membershipTier.description}</h1>
+              <h1 style={{ marginBottom: 'var(--spacing-s)'}}>Monthly Pledge: ${membershipTier.monthlyContributionInUSD}</h1>
+              {membershipTier.perks.map((tierPerk, i) => (
                 <>
                   <p>
                     {perkDescriptions.map((globalPerk, i) => (
@@ -199,7 +223,7 @@ const MembershipsPage = (props: Props) => {
               {/* cancel membership button */}
               <Button
                 button="alt"
-                onClick={(e) => editMembership(e, defaultTier.index)}
+                onClick={(e) => editMembership(e, membershipTier.index)}
                 className="cancel-membership-button"
                 label={__('Edit Tier')}
                 icon={ICONS.EDIT}
