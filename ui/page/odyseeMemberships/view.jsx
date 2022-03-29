@@ -122,12 +122,25 @@ const MembershipsPage = (props: Props) => {
     setIsEditing(tierName);
   };
 
+  const deleteMembership = function (tierIndex) {
+    log(tierIndex)
+
+    let membershipsBeforeDeletion = creatorMemberships;
+
+    log(membershipsBeforeDeletion)
+
+    membershipsBeforeDeletion.splice(tierIndex, 1);
+
+    log(membershipsBeforeDeletion)
+
+    setCreatorMemberships(membershipsBeforeDeletion)
+  };
+
   const handleChange = (event) => {
-    console.log()
     setEditTierDescription(event.target.value);
   };
 
-  const cancelEditingMembership = function () {
+  const cancelEditingMembership =  function () {
     setIsEditing(false);
   };
 
@@ -209,7 +222,7 @@ const MembershipsPage = (props: Props) => {
       </div>
 
       {/* list through different tiers */}
-      {creatorMemberships.map((membershipTier, i) => (
+      {creatorMemberships.map((membershipTier, membershipIndex) => (
         <>
           {isEditing === membershipTier.index && (
             <>
@@ -251,7 +264,7 @@ const MembershipsPage = (props: Props) => {
               {/* cancel membership button */}
               <Button
                 button="alt"
-                // onClick={(e) => cancelMembership(e, membership)}
+                onClick={(e) => deleteMembership(membershipIndex)}
                 className="cancel-membership-button"
                 label={__('Delete Tier')}
                 icon={ICONS.DELETE}
