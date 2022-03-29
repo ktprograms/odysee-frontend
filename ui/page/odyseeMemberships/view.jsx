@@ -8,6 +8,7 @@ import Button from 'component/button';
 import { useHistory } from 'react-router';
 import * as PAGES from 'constants/pages';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
+import { FormField } from 'component/common/form';
 
 let stripeEnvironment = getStripeEnvironment();
 
@@ -119,8 +120,45 @@ const MembershipsPage = (props: Props) => {
     setIsEditing(tierName);
   };
 
+  const cancelEditingMembership = function () {
+    setIsEditing(false);
+  };
+
+  function createEditTier(tier) {
+    return (
+      <div className="edit-div" style={{ marginBottom: '45px' }}>
+        <FormField
+          type="text"
+          name="channel_title2"
+          label={__('Tier Name')}
+          value={tier.displayName}
+        />
+        <FormField
+          type="markdown"
+          name="content_description2"
+          label={__('Tier Description')}
+          placeholder={__('Description of your tier')}
+          value={tier.description}
+        />
+        <FormField
+          className="form-field--price-amount"
+          type="number"
+          name="content_bid2"
+          step="1"
+          label={__('Monthly Contribution ($/Month)')}
+          value={tier.monthlyContributionInUSD}
+        />
+        <div className="section__actions">
+          <Button button="primary" label={'Save Tier'} />
+          <Button button="link" label={__('Cancel')} onClick={cancelEditingMembership} />
+        </div>
+      </div>
+    );
+  }
+
   const createTiers = (
     <div className="create-tiers-div">
+
       <div className="memberships-header" style={{ marginBottom: 'var(--spacing-xl)'}}>
         <h1 style={{ fontSize: '24px', marginBottom: 'var(--spacing-s)' }}>Create Your Membership Tiers</h1>
         <h2 style={{ fontSize: '18px' }}>Here you will be able to define the tiers that your viewers can subscribe to</h2>
@@ -130,7 +168,9 @@ const MembershipsPage = (props: Props) => {
       {defaultTiers.map((defaultTier, i) => (
         <>
           {isEditing === defaultTier.index && (
-            <h1>You are editing!</h1>
+            <>
+              {createEditTier(defaultTier)}
+            </>
           )}
           {isEditing !== defaultTier.index && (
             <div style={{ marginBottom: 'var(--spacing-xxl)'}}>
