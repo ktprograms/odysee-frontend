@@ -115,8 +115,16 @@ const MembershipsPage = (props: Props) => {
 
   const [creatorMemberships, setCreatorMemberships] = React.useState(membershipTiers);
 
-  const editMembership = function (e, tierName) {
+  const [editTierDescription, setEditTierDescription] = React.useState('');
+
+  const editMembership = function (e, tierName, tierDescription) {
+    setEditTierDescription(tierDescription);
     setIsEditing(tierName);
+  };
+
+  const handleChange = (event) => {
+    console.log()
+    setEditTierDescription(event.target.value);
   };
 
   const cancelEditingMembership = function () {
@@ -127,7 +135,7 @@ const MembershipsPage = (props: Props) => {
     const matchingMembershipByIndex = membershipTiers.findIndex(m => m.index === tierIndex);
 
     const newTierName = document.querySelectorAll('input[name=tier_name]')[0]?.value;
-    const newTierDescription = document.querySelectorAll('textarea[id=tier_description]')[0]?.value;
+    const newTierDescription = editTierDescription;
     const newTierMonthlyContribution = document.querySelectorAll('input[name=tier_contribution]')[0]?.value;
 
     const newObject = {
@@ -172,7 +180,8 @@ const MembershipsPage = (props: Props) => {
           name="tier_description"
           label={__('Tier Description')}
           placeholder={__('Description of your tier')}
-          defaultValue={tier.description}
+          value={editTierDescription}
+          onChange={handleChange}
         />
         <FormField
           className="form-field--price-amount"
@@ -234,7 +243,7 @@ const MembershipsPage = (props: Props) => {
               {/* cancel membership button */}
               <Button
                 button="alt"
-                onClick={(e) => editMembership(e, membershipTier.index)}
+                onClick={(e) => editMembership(e, membershipTier.index, membershipTier.description)}
                 className="cancel-membership-button"
                 label={__('Edit Tier')}
                 icon={ICONS.EDIT}
