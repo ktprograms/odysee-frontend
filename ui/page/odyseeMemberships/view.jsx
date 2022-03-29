@@ -76,21 +76,18 @@ const MembershipsPage = (props: Props) => {
 
   let membershipTiers = [{
     index: 0,
-    name: 'helping-hand',
     displayName: 'Helping Hand',
     description: 'You\'re doing your part, thank you!',
     monthlyContributionInUSD: 5,
     perks: ['exclusiveAccess', 'badge'],
   }, {
     index: 1,
-    name: 'big-time-supporter',
     displayName: 'Big-Time Supporter',
     description: 'You are a true fan and are helping in a big way!',
     monthlyContributionInUSD: 10,
     perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis'],
   }, {
     index: 2,
-    name: 'community-mvp',
     displayName: 'Community MVP',
     description: 'Where would this creator be without you? You are a true legend!',
     monthlyContributionInUSD: 20,
@@ -129,13 +126,18 @@ const MembershipsPage = (props: Props) => {
   function saveMembership(tierIndex) {
     const matchingMembershipByIndex = membershipTiers.findIndex(m => m.index === tierIndex);
 
+    const newTierName = document.querySelectorAll('input[name=tier_name]')[0]?.value;
+    const newTierDescription = document.querySelectorAll('textarea[id=tier_description]')[0]?.value;
+    const newTierMonthlyContribution = document.querySelectorAll('input[name=tier_contribution]')[0]?.value;
+
     const newObject = {
-      name: 'community-mvp',
-      displayName: 'Community MVP',
-      description: 'Where would this creator be without you? You are a true legend!',
-      monthlyContributionInUSD: 20,
+      displayName: newTierName,
+      description: newTierDescription,
+      monthlyContributionInUSD: newTierMonthlyContribution,
       perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis', 'custom-badge'],
     };
+
+    console.log(newObject);
 
     membershipTiers[matchingMembershipByIndex] = newObject;
 
@@ -153,24 +155,33 @@ const MembershipsPage = (props: Props) => {
       <div className="edit-div" style={{ marginBottom: '45px' }}>
         <FormField
           type="text"
-          name="channel_title2"
+          name="tier_name"
           label={__('Tier Name')}
-          value={tier.displayName}
+          defaultValue={tier.displayName}
         />
+        {/*<FormField*/}
+        {/*  type="markdown"*/}
+        {/*  name="tier_description"*/}
+        {/*  label={__('Tier Description')}*/}
+        {/*  placeholder={__('Description of your tier')}*/}
+        {/*  value={tier.description}*/}
+        {/*/>*/}
         <FormField
-          type="markdown"
-          name="content_description2"
+          type="textarea"
+          rows="10"
+          name="tier_description"
           label={__('Tier Description')}
           placeholder={__('Description of your tier')}
-          value={tier.description}
+          defaultValue={tier.description}
         />
         <FormField
           className="form-field--price-amount"
           type="number"
-          name="content_bid2"
+          name="tier_contribution"
           step="1"
           label={__('Monthly Contribution ($/Month)')}
-          value={tier.monthlyContributionInUSD}
+          defaultValue={tier.monthlyContributionInUSD}
+          onChange={(event) => parseFloat(event.target.value)}
         />
         <div className="section__actions">
           <Button button="primary" label={'Save Tier'} onClick={() => saveMembership(tier.index)} />
