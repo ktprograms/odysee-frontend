@@ -187,11 +187,20 @@ const MembershipsPage = (props: Props) => {
     const newTierDescription = editTierDescription;
     const newTierMonthlyContribution = document.querySelectorAll('input[name=tier_contribution]')[0]?.value;
 
+    let selectedPerks = [];
+
+    for (const perkDescription of perkDescriptions){
+      const odyseePerkSelected = document.getElementById(perkDescription.perkName).checked;
+      if (odyseePerkSelected) {
+        selectedPerks.push(perkDescription.perkName);
+      }
+    }
+
     const newObject = {
       displayName: newTierName,
       description: newTierDescription,
       monthlyContributionInUSD: newTierMonthlyContribution,
-      perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis', 'custom-badge'],
+      perks: selectedPerks,
     };
 
     copyOfMemberships[tierIndex] = newObject;
@@ -236,11 +245,11 @@ const MembershipsPage = (props: Props) => {
           <>
             <FormField
               type="checkbox"
-              checked={containsPerk(tierPerk.perkName)}
+              defaultChecked={containsPerk(tierPerk.perkName)}
               // disabled={!optimizeAvail}
               // onChange={() => setUserOptimize(!userOptimize)}
               label={tierPerk.perkDescription}
-              name="optimize"
+              name={tierPerk.perkName}
             />
           </>
         ))}
@@ -285,6 +294,7 @@ const MembershipsPage = (props: Props) => {
               {membershipTier.perks.map((tierPerk, i) => (
                 <>
                   <p>
+                    {/* list all the perks */}
                     {perkDescriptions.map((globalPerk, i) => (
                       <>
                         {tierPerk === globalPerk.perkName && (
