@@ -2,7 +2,6 @@
 // @flow
 import React from 'react';
 import Page from 'component/page';
-import { getStripeEnvironment } from 'util/stripe';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import Button from 'component/button';
@@ -11,14 +10,13 @@ import * as PAGES from 'constants/pages';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { FormField } from 'component/common/form';
 
-let stripeEnvironment = getStripeEnvironment();
-
 const TAB_QUERY = 'tab';
 
 const TABS = {
   CREATE_TIERS: 'tiers',
   PAYOUT: 'payout',
   BALANCE: 'balance',
+  MY_MEMBERSHIPS: 'my_memberships',
 };
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -57,6 +55,9 @@ const MembershipsPage = (props: Props) => {
     case TABS.BALANCE:
       tabIndex = 2;
       break;
+    case TABS.MY_MEMBERSHIPS:
+      tabIndex = 3;
+      break;
     default:
       tabIndex = 0;
       break;
@@ -71,6 +72,8 @@ const MembershipsPage = (props: Props) => {
       url += `${TAB_QUERY}=${TABS.PAYOUT}`;
     } else if (newTabIndex === 2) {
       url += `${TAB_QUERY}=${TABS.BALANCE}`;
+    } else if (newTabIndex === 3) {
+      url += `${TAB_QUERY}=${TABS.MY_MEMBERSHIPS}`;
     }
     push(url);
   }
@@ -123,8 +126,6 @@ const MembershipsPage = (props: Props) => {
   };
 
   const deleteMembership = function (tierIndex) {
-    console.log('clicked');
-
     let membershipsBeforeDeletion = creatorMemberships;
 
     openModal(MODALS.CONFIRM_DELETE_MEMBERSHIP, {
@@ -132,18 +133,6 @@ const MembershipsPage = (props: Props) => {
       membershipsBeforeDeletion,
       tierIndex,
     });
-
-    // log(tierIndex)
-    //
-    // let membershipsBeforeDeletion = creatorMemberships;
-    //
-    // log(membershipsBeforeDeletion)
-    //
-    // membershipsBeforeDeletion.splice(tierIndex, 1);
-    //
-    // log(membershipsBeforeDeletion)
-    //
-    // setCreatorMemberships(membershipsBeforeDeletion)
   };
 
   const addMembership = function () {
@@ -154,14 +143,11 @@ const MembershipsPage = (props: Props) => {
       perks: ['exclusiveAccess', 'badge'],
     };
 
-    console.log(creatorMemberships);
-
     const membershipsBeforeAdded = creatorMemberships;
 
     membershipsBeforeAdded.push(newMembership);
 
     setCreatorMemberships(membershipsBeforeAdded);
-
   };
 
   const handleChange = (event) => {
@@ -173,15 +159,7 @@ const MembershipsPage = (props: Props) => {
   };
 
   function saveMembership(tierIndex) {
-
-    log(tierIndex)
-    console.log(creatorMemberships);
-
-    const matchingMembershipByIndex = creatorMemberships[tierIndex];
-
     const copyOfMemberships = creatorMemberships;
-
-    log(matchingMembershipByIndex);
 
     const newTierName = document.querySelectorAll('input[name=tier_name]')[0]?.value;
     const newTierDescription = editTierDescription;
@@ -194,11 +172,7 @@ const MembershipsPage = (props: Props) => {
       perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis', 'custom-badge'],
     };
 
-    console.log(newObject);
-
     copyOfMemberships[tierIndex] = newObject;
-
-    log(copyOfMemberships);
 
     setCreatorMemberships(copyOfMemberships);
 
@@ -206,6 +180,10 @@ const MembershipsPage = (props: Props) => {
   }
 
   function createEditTier(tier, membershipIndex) {
+    const containsPerk = function(perk) {
+      return tier.perks.indexOf(perk) > -1;
+    };
+
     return (
       <div className="edit-div" style={{ marginBottom: '45px' }}>
         <FormField
@@ -226,11 +204,24 @@ const MembershipsPage = (props: Props) => {
           type="textarea"
           rows="10"
           name="tier_description"
-          label={__('Tier Description')}
+          label={__('Tier Description (You can also add custom benefits here)')}
           placeholder={__('Description of your tier')}
           value={editTierDescription}
           onChange={handleChange}
         />
+        <label htmlFor="tier_name" style={{ marginTop: '15px', marginBottom: '8px' }}>Odysee Perks</label>
+        {perkDescriptions.map((tierPerk, i) => (
+          <>
+            <FormField
+              type="checkbox"
+              checked={containsPerk(tierPerk.perkName)}
+              // disabled={!optimizeAvail}
+              // onChange={() => setUserOptimize(!userOptimize)}
+              label={tierPerk.perkDescription}
+              name="optimize"
+            />
+          </>
+        ))}
         <FormField
           className="form-field--price-amount"
           type="number"
@@ -329,6 +320,7 @@ const MembershipsPage = (props: Props) => {
             <Tab>{__('Create Tiers')}</Tab>
             <Tab>{__('Payout Options')}</Tab>
             <Tab>{__('Supporters')}</Tab>
+            <Tab>{__('My Memberships')}</Tab>
           </TabList>
           <TabPanels>
             {/* balances for lbc and fiat */}
@@ -341,6 +333,9 @@ const MembershipsPage = (props: Props) => {
             </TabPanel>
             <TabPanel>
               <h1>Supporters</h1>
+            </TabPanel>
+            <TabPanel>
+              <h1>My Memberships</h1>
             </TabPanel>
           </TabPanels>
         </Tabs>

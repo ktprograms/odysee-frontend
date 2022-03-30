@@ -4,7 +4,6 @@ import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
-import { getStripeEnvironment } from 'util/stripe';
 
 type Props = {
   closeModal: () => void,
@@ -20,9 +19,10 @@ export default function ModalRemoveCard(props: Props) {
     tierIndex,
   } = props;
 
-  function deleteMembership(){
+  function deleteMembership() {
     const membershipsAfterDeletion = membershipsBeforeDeletion.splice(tierIndex, 1);
     setCreatorMemberships(membershipsAfterDeletion);
+    closeModal();
   }
 
   return (
