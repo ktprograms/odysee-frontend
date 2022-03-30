@@ -20,6 +20,7 @@ const MAP = Object.freeze({
   [MODALS.CONFIRM_FILE_REMOVE]: lazyImport(() => import('modal/modalRemoveFile' /* webpackChunkName: "modalRemoveFile" */)),
   [MODALS.CONFIRM_ODYSEE_PREMIUM]: lazyImport(() => import('modal/modalConfirmOdyseeMembership' /* webpackChunkName: "modalConfirmOdyseeMembership" */)),
   [MODALS.CONFIRM_REMOVE_CARD]: lazyImport(() => import('modal/modalRemoveCard' /* webpackChunkName: "modalRemoveCard" */)),
+  [MODALS.CONFIRM_DELETE_MEMBERSHIP]: lazyImport(() => import('modal/modalDeleteMembership' /* webpackChunkName: "modalDeleteMembership" */)),
   [MODALS.CONFIRM_REMOVE_COMMENT]: lazyImport(() => import('modal/modalRemoveComment' /* webpackChunkName: "modalRemoveComment" */)),
   [MODALS.CONFIRM_THUMBNAIL_UPLOAD]: lazyImport(() => import('modal/modalConfirmThumbnailUpload' /* webpackChunkName: "modalConfirmThumbnailUpload" */)),
   [MODALS.CONFIRM_TRANSACTION]: lazyImport(() => import('modal/modalConfirmTransaction' /* webpackChunkName: "modalConfirmTransaction" */)),

@@ -4,6 +4,7 @@ import React from 'react';
 import Page from 'component/page';
 import { getStripeEnvironment } from 'util/stripe';
 import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import Button from 'component/button';
 import { useHistory } from 'react-router';
 import * as PAGES from 'constants/pages';
@@ -26,13 +27,13 @@ let log = (input) => {};
 if (isDev) log = console.log;
 
 type Props = {
-
+  openModal: (string, {}) => void,
 };
 
 const MembershipsPage = (props: Props) => {
 
   const {
-
+    openModal,
   } = props;
 
   const {
@@ -122,34 +123,44 @@ const MembershipsPage = (props: Props) => {
   };
 
   const deleteMembership = function (tierIndex) {
-    log(tierIndex)
+    console.log('clicked');
 
     let membershipsBeforeDeletion = creatorMemberships;
 
-    log(membershipsBeforeDeletion)
+    openModal(MODALS.CONFIRM_DELETE_MEMBERSHIP, {
+      setCreatorMemberships,
+      membershipsBeforeDeletion,
+      tierIndex,
+    });
 
-    membershipsBeforeDeletion.splice(tierIndex, 1);
-
-    log(membershipsBeforeDeletion)
-
-    setCreatorMemberships(membershipsBeforeDeletion)
+    // log(tierIndex)
+    //
+    // let membershipsBeforeDeletion = creatorMemberships;
+    //
+    // log(membershipsBeforeDeletion)
+    //
+    // membershipsBeforeDeletion.splice(tierIndex, 1);
+    //
+    // log(membershipsBeforeDeletion)
+    //
+    // setCreatorMemberships(membershipsBeforeDeletion)
   };
 
   const addMembership = function () {
     const newMembership = {
       displayName: 'New Membership Tier',
-      description: 'Here\'s your 4th added tier. You can add one more.',
+      description: 'Here\'s your 4th added tier. You can add one more.', // TODO: make this dynamic
       monthlyContributionInUSD: 5,
       perks: ['exclusiveAccess', 'badge'],
     };
 
     console.log(creatorMemberships);
 
-    const newFirjoa = creatorMemberships.push(newMembership);
-    log(newFirjoa);
+    const membershipsBeforeAdded = creatorMemberships;
 
-    // setCreatorMemberships(creatorMemberships.push(newMembership));
+    membershipsBeforeAdded.push(newMembership);
 
+    setCreatorMemberships(membershipsBeforeAdded);
 
   };
 
@@ -277,22 +288,24 @@ const MembershipsPage = (props: Props) => {
                   </p>
                 </>
               ))}
-              {/* cancel membership button */}
-              <Button
-                button="alt"
-                onClick={(e) => editMembership(e, membershipIndex, membershipTier.description)}
-                className="edit-membership-button"
-                label={__('Edit Tier')}
-                icon={ICONS.EDIT}
-              />
-              {/* cancel membership button */}
-              <Button
-                button="alt"
-                onClick={(e) => deleteMembership(membershipIndex)}
-                className="cancel-membership-button"
-                label={__('Delete Tier')}
-                icon={ICONS.DELETE}
-              />
+              <div className="buttons-div" style={{ marginTop: '13px' }}>
+                {/* cancel membership button */}
+                <Button
+                  button="alt"
+                  onClick={(e) => editMembership(e, membershipIndex, membershipTier.description)}
+                  className="edit-membership-button"
+                  label={__('Edit Tier')}
+                  icon={ICONS.EDIT}
+                />
+                {/* cancel membership button */}
+                <Button
+                  button="alt"
+                  onClick={(e) => deleteMembership(membershipIndex)}
+                  className="cancel-membership-button"
+                  label={__('Delete Tier')}
+                  icon={ICONS.DELETE}
+                />
+              </div>
             </div>
           )}
         </>
