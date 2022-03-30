@@ -13,14 +13,10 @@ type Props = {
 };
 
 export default function ModalRemoveCard(props: Props) {
-  const { closeModal,
-    setCreatorMemberships,
-    membershipsBeforeDeletion,
-    tierIndex,
-  } = props;
+  const { closeModal, setCreatorMemberships, membershipsBeforeDeletion, tierIndex } = props;
 
   function deleteMembership() {
-    const membershipsAfterDeletion = membershipsBeforeDeletion.splice(tierIndex, 1);
+    const membershipsAfterDeletion = membershipsBeforeDeletion.filter((tiers, index) => index !== tierIndex);
     setCreatorMemberships(membershipsAfterDeletion);
     closeModal();
   }

@@ -165,12 +165,9 @@ const MembershipsPage = (props: Props) => {
       perks: ['exclusiveAccess', 'badge'],
     };
 
-    const membershipsBeforeAdded = creatorMemberships;
-
-    membershipsBeforeAdded.push(newMembership);
-
-    setCreatorMemberships(membershipsBeforeAdded);
+    setCreatorMemberships([...creatorMemberships, newMembership]);
   };
+  console.log(creatorMemberships)
 
   const handleChange = (event) => {
     setEditTierDescription(event.target.value);
