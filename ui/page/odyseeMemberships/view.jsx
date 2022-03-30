@@ -9,6 +9,10 @@ import { useHistory } from 'react-router';
 import * as PAGES from 'constants/pages';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { FormField } from 'component/common/form';
+import { Lbryio } from 'lbryinc';
+import { getStripeEnvironment } from 'util/stripe';
+
+let stripeEnvironment = getStripeEnvironment();
 
 const TAB_QUERY = 'tab';
 
@@ -38,6 +42,24 @@ const MembershipsPage = (props: Props) => {
     location: { search },
     push,
   } = useHistory();
+
+  (async function() {
+    const response = await Lbryio.call(
+      'account',
+      'status',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    );
+
+    console.log(response);
+    if (response.charges_enabled) {
+      setHaveAlreadyConfirmedBankAccount(true);
+    }
+  })();
+
+  const [haveAlreadyConfirmedBankAccount, setHaveAlreadyConfirmedBankAccount] = React.useState(false);
 
   const urlParams = new URLSearchParams(search);
 
@@ -317,22 +339,53 @@ const MembershipsPage = (props: Props) => {
       <Page className="premium-wrapper">
         <Tabs onChange={onTabChange} index={tabIndex}>
           <TabList className="tabs__list--collection-edit-page">
-            <Tab>{__('Create Tiers')}</Tab>
-            <Tab>{__('Payout Options')}</Tab>
-            <Tab>{__('Supporters')}</Tab>
             <Tab>{__('My Memberships')}</Tab>
+            <Tab>{__('Create Tiers')}</Tab>
+            <Tab>{__('My Pledges')}</Tab>
           </TabList>
           <TabPanels>
-            {/* balances for lbc and fiat */}
+            <TabPanel>
+              <h1 style={{ fontSize: '20px', marginTop: '20px' }}>Membership Page</h1>
+
+              <h1 style={{ marginTop: '10px' }}>You can view your membership page as a viewer would, here: https://odysee.com/mychannelname/membership</h1>
+
+              <h1 style={{ marginTop: '10px' }}>Click here to copy your membership page to your clipboard</h1>
+
+              <div className="bank-account-information__div">
+                <h1 style={{ fontSize: '20px', marginTop: '15px' }}>Bank Account Status</h1>
+                <div className="bank-account-status__div" style={{ marginTop: '15px' }}>
+                  {!haveAlreadyConfirmedBankAccount && (
+                    <><h1>
+                      Please go to this link and get a bank account
+                    </h1></>
+                  )}
+                  {haveAlreadyConfirmedBankAccount && (
+                    <><h1>
+                      Congratulations, you have successfully linked your bank account and can receive tips and memberships
+                    </h1></>
+                  )}
+                </div>
+              </div>
+
+              <h1 style={{ fontSize: '20px', marginTop: '20px' }}>Received Funds</h1>
+
+              <h1 style={{ marginTop: '10px' }}> You currently have 0 supporters </h1>
+
+              <h1 style={{ marginTop: '10px' }}> Your estimated monthly income is currently $0 </h1>
+
+              <h1 style={{ marginTop: '10px' }}> You have received $0 total from your supporters</h1>
+
+              <h1 style={{ marginTop: '10px' }}> You do not any withdrawable funds </h1>
+
+
+            </TabPanel>
             <TabPanel>
               {createTiers}
             </TabPanel>
-            {/* transactions panel */}
             <TabPanel>
-              <h1>Payout Options</h1>
-            </TabPanel>
-            <TabPanel>
-              <h1>Supporters</h1>
+              <h1 style={{ marginTop: '10px' }}> You are not currently supporting any creators </h1>
+
+              <h1 style={{ marginTop: '10px' }}> You can find some creators to support on the membership page here </h1>
             </TabPanel>
             <TabPanel>
               <h1>My Memberships</h1>
