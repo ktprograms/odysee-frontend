@@ -11,6 +11,7 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { FormField } from 'component/common/form';
 import { Lbryio } from 'lbryinc';
 import { getStripeEnvironment } from 'util/stripe';
+import moment from 'moment';
 
 let stripeEnvironment = getStripeEnvironment();
 
@@ -158,9 +159,20 @@ const MembershipsPage = (props: Props) => {
   };
 
   const addMembership = function () {
+    const amountOfMembershipsCurrently = creatorMemberships.length;
+
+    const nextMembershipOrdinal = moment.localeData().ordinal(amountOfMembershipsCurrently + 1);
+
+    let amountOfMembershipsLeft;
+    if (amountOfMembershipsCurrently === 4) {
+      amountOfMembershipsLeft = 'This is the maximum amount you can have';
+    } else {
+      amountOfMembershipsLeft = `You can add ${5 - (amountOfMembershipsCurrently + 1)} more`;
+    }
+
     const newMembership = {
       displayName: 'New Membership Tier',
-      description: 'Here\'s your 4th added tier. You can add one more.', // TODO: make this dynamic
+      description: `Here's your ${nextMembershipOrdinal} added tier. ${amountOfMembershipsLeft}.`,
       monthlyContributionInUSD: 5,
       perks: ['exclusiveAccess', 'badge'],
     };
@@ -331,13 +343,17 @@ const MembershipsPage = (props: Props) => {
         </>
       ))}
 
-      <Button
-        button="alt"
-        onClick={(e) => addMembership()}
-        className="add-membership-button"
-        label={__('Add Tier')}
-        icon={ICONS.ADD}
-      />
+      { creatorMemberships.length < 5 && (
+        <>
+          <Button
+            button="alt"
+            onClick={(e) => addMembership()}
+            className="add-membership-button"
+            label={__('Add Tier')}
+            icon={ICONS.ADD}
+          />
+        </>
+      )}
     </div>
   );
 
