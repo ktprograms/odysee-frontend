@@ -79,3 +79,22 @@
 .membership-bolded {
   color: var(--color-text);
 }
+
+
+/** CREATOR MEMBERSHIPS PAGE **/
+
+.my-membership__div {
+  .form-field--copyable {
+    max-width: 535px;
+    margin-top: 5px;
+  }
+
+  .channel__selector {
+    margin-bottom: 17px;
+  }
+
+  .membership_button {
+    max-width: 279px;
+  }
+}
+

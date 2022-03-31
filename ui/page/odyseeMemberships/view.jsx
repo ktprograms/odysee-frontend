@@ -14,7 +14,8 @@ import { getStripeEnvironment } from 'util/stripe';
 import moment from 'moment';
 import CopyableText from 'component/copyableText';
 import ChannelSelector from 'component/channelSelector';
-
+import { formatLbryUrlForWeb } from 'util/url';
+import { URL } from 'config';
 
 let stripeEnvironment = getStripeEnvironment();
 
@@ -34,6 +35,7 @@ if (isDev) log = console.log;
 
 type Props = {
   openModal: (string, {}) => void,
+  activeChannelClaim: ?ChannelClaim,
 };
 
 const MembershipsPage = (props: Props) => {
@@ -42,9 +44,6 @@ const MembershipsPage = (props: Props) => {
     openModal,
     activeChannelClaim,
   } = props;
-
-  console.log('active channel claim');
-  console.log(activeChannelClaim);
 
   const {
     location: { search },
@@ -61,7 +60,6 @@ const MembershipsPage = (props: Props) => {
       'post'
     );
 
-    console.log(response);
     if (response.charges_enabled) {
       setHaveAlreadyConfirmedBankAccount(true);
     }
@@ -149,8 +147,6 @@ const MembershipsPage = (props: Props) => {
   const [editTierDescription, setEditTierDescription] = React.useState('');
 
   const editMembership = function (e, tierIndex, tierDescription) {
-
-    log(tierIndex)
     setEditTierDescription(tierDescription);
     setIsEditing(tierIndex);
   };
@@ -186,9 +182,13 @@ const MembershipsPage = (props: Props) => {
 
     setCreatorMemberships([...creatorMemberships, newMembership]);
   };
-  console.log(creatorMemberships)
 
-  // const channelUrlForNavigation = formatLbryUrlForWeb(claim.canonical_url);
+  let localMembershipPageUrl;
+  let remoteMembershipPageUrl;
+  if (activeChannelClaim) {
+    remoteMembershipPageUrl = `${URL}${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}/membership`;
+    localMembershipPageUrl = `${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}/membership`;
+  }
 
   const handleChange = (event) => {
     setEditTierDescription(event.target.value);
@@ -207,7 +207,7 @@ const MembershipsPage = (props: Props) => {
 
     let selectedPerks = [];
 
-    for (const perkDescription of perkDescriptions){
+    for (const perkDescription of perkDescriptions) {
       const odyseePerkSelected = document.getElementById(perkDescription.perkName).checked;
       if (odyseePerkSelected) {
         selectedPerks.push(perkDescription.perkName);
@@ -287,6 +287,62 @@ const MembershipsPage = (props: Props) => {
       </div>
     );
   }
+
+  const myMembershipPage = (
+    <div className="my-membership__div">
+      <h1 style={{ fontSize: '20px', marginTop: '25px', marginBottom: '14px' }}>Membership Page</h1>
+
+      <ChannelSelector hideAnon style={{ marginBottom: '17px' }} />
+
+      <Button
+        button="primary"
+        className="membership_button"
+        label={__('View your membership page')}
+        icon={ICONS.UPGRADE}
+        navigate={`${localMembershipPageUrl}`}
+      />
+
+      <h1 style={{ marginTop: '10px' }}>You can also click the button below to copy your membership page url</h1>
+
+      <CopyableText className="membership-page__copy-button" primaryButton copyable={remoteMembershipPageUrl} snackMessage={__('Page location copied')} style={{ maxWidth: '535px', marginTop: '5px' }} />
+
+      <h1 style={{ fontSize: '20px', marginTop: '25px' }}>Received Funds</h1>
+
+      <h1 style={{ marginTop: '10px' }}> You currently have 0 supporters </h1>
+
+      <h1 style={{ marginTop: '10px' }}> Your estimated monthly income is currently $0 </h1>
+
+      <h1 style={{ marginTop: '10px' }}> You have received $0 total from your supporters</h1>
+
+      <h1 style={{ marginTop: '10px' }}> You do not any withdrawable funds </h1>
+
+      <div className="bank-account-information__div" style={{ marginTop: '33px' }}>
+        <h1 style={{ fontSize: '20px' }}>Bank Account Status</h1>
+        <div className="bank-account-status__div" style={{ marginTop: '15px' }}>
+          {!haveAlreadyConfirmedBankAccount && (
+            <>
+              <h1>
+                To be able to begin receiving payments you must connect a Bank Account first
+              </h1>
+              <Button
+                button="primary"
+                className="membership_button"
+                label={__('Connect a bank account')}
+                icon={ICONS.FINANCE}
+                navigate={'/$/account'}
+                style={{ maxWidth: '254px' }}
+              />
+            </>
+          )}
+          {haveAlreadyConfirmedBankAccount && (
+            <><h1>
+              Congratulations, you have successfully linked your bank account and can receive tips and memberships
+            </h1></>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 
   const createTiers = (
     <div className="create-tiers-div">
@@ -378,60 +434,7 @@ const MembershipsPage = (props: Props) => {
           <TabPanels>
             {/* My Memberships panel */}
             <TabPanel>
-              <h1 style={{ fontSize: '20px', marginTop: '25px' }}>Membership Page</h1>
-
-              <ChannelSelector />
-
-              <Button
-                button="primary"
-                className="membership_button"
-                label={__('View your membership page')}
-                icon={ICONS.UPGRADE}
-                navigate={'/$/account'}
-                style={{ maxWidth: '279px' }}
-              />
-
-              <h1 style={{ marginTop: '10px' }}>You can also click the button below to copy your membership page url</h1>
-
-              <CopyableText primaryButton copyable={'hello'} snackMessage={__('Page location copied')} />
-
-              <h1 style={{ fontSize: '20px', marginTop: '25px' }}>Received Funds</h1>
-
-              <h1 style={{ marginTop: '10px' }}> You currently have 0 supporters </h1>
-
-              <h1 style={{ marginTop: '10px' }}> Your estimated monthly income is currently $0 </h1>
-
-              <h1 style={{ marginTop: '10px' }}> You have received $0 total from your supporters</h1>
-
-              <h1 style={{ marginTop: '10px' }}> You do not any withdrawable funds </h1>
-
-              <div className="bank-account-information__div" style={{ marginTop: '25px' }}>
-                <h1 style={{ fontSize: '20px' }}>Bank Account Status</h1>
-                <div className="bank-account-status__div" style={{ marginTop: '15px' }}>
-                  {!haveAlreadyConfirmedBankAccount && (
-                    <>
-                      <h1>
-                      To be able to begin receiving payments you must connect a Bank Account first
-                      </h1>
-                      <Button
-                        button="primary"
-                        className="membership_button"
-                        label={__('Connect a bank account')}
-                        icon={ICONS.FINANCE}
-                        navigate={'/$/account'}
-                        style={{ maxWidth: '254px' }}
-                      />
-                    </>
-                  )}
-                  {haveAlreadyConfirmedBankAccount && (
-                    <><h1>
-                      Congratulations, you have successfully linked your bank account and can receive tips and memberships
-                    </h1></>
-                  )}
-                </div>
-              </div>
-
-
+              {myMembershipPage}
             </TabPanel>
             <TabPanel>
               {createTiers}
