@@ -12,6 +12,9 @@ import { FormField } from 'component/common/form';
 import { Lbryio } from 'lbryinc';
 import { getStripeEnvironment } from 'util/stripe';
 import moment from 'moment';
+import CopyableText from 'component/copyableText';
+import ChannelSelector from 'component/channelSelector';
+
 
 let stripeEnvironment = getStripeEnvironment();
 
@@ -37,7 +40,11 @@ const MembershipsPage = (props: Props) => {
 
   const {
     openModal,
+    activeChannelClaim,
   } = props;
+
+  console.log('active channel claim');
+  console.log(activeChannelClaim);
 
   const {
     location: { search },
@@ -180,6 +187,8 @@ const MembershipsPage = (props: Props) => {
     setCreatorMemberships([...creatorMemberships, newMembership]);
   };
   console.log(creatorMemberships)
+
+  // const channelUrlForNavigation = formatLbryUrlForWeb(claim.canonical_url);
 
   const handleChange = (event) => {
     setEditTierDescription(event.target.value);
@@ -367,30 +376,26 @@ const MembershipsPage = (props: Props) => {
             <Tab>{__('My Pledges')}</Tab>
           </TabList>
           <TabPanels>
+            {/* My Memberships panel */}
             <TabPanel>
-              <h1 style={{ fontSize: '20px', marginTop: '20px' }}>Membership Page</h1>
+              <h1 style={{ fontSize: '20px', marginTop: '25px' }}>Membership Page</h1>
 
-              <h1 style={{ marginTop: '10px' }}>You can view your membership page as a viewer would, here: https://odysee.com/mychannelname/membership</h1>
+              <ChannelSelector />
 
-              <h1 style={{ marginTop: '10px' }}>Click here to copy your membership page to your clipboard</h1>
+              <Button
+                button="primary"
+                className="membership_button"
+                label={__('View your membership page')}
+                icon={ICONS.UPGRADE}
+                navigate={'/$/account'}
+                style={{ maxWidth: '279px' }}
+              />
 
-              <div className="bank-account-information__div">
-                <h1 style={{ fontSize: '20px', marginTop: '15px' }}>Bank Account Status</h1>
-                <div className="bank-account-status__div" style={{ marginTop: '15px' }}>
-                  {!haveAlreadyConfirmedBankAccount && (
-                    <><h1>
-                      Please go to this link and get a bank account
-                    </h1></>
-                  )}
-                  {haveAlreadyConfirmedBankAccount && (
-                    <><h1>
-                      Congratulations, you have successfully linked your bank account and can receive tips and memberships
-                    </h1></>
-                  )}
-                </div>
-              </div>
+              <h1 style={{ marginTop: '10px' }}>You can also click the button below to copy your membership page url</h1>
 
-              <h1 style={{ fontSize: '20px', marginTop: '20px' }}>Received Funds</h1>
+              <CopyableText primaryButton copyable={'hello'} snackMessage={__('Page location copied')} />
+
+              <h1 style={{ fontSize: '20px', marginTop: '25px' }}>Received Funds</h1>
 
               <h1 style={{ marginTop: '10px' }}> You currently have 0 supporters </h1>
 
@@ -399,6 +404,32 @@ const MembershipsPage = (props: Props) => {
               <h1 style={{ marginTop: '10px' }}> You have received $0 total from your supporters</h1>
 
               <h1 style={{ marginTop: '10px' }}> You do not any withdrawable funds </h1>
+
+              <div className="bank-account-information__div" style={{ marginTop: '25px' }}>
+                <h1 style={{ fontSize: '20px' }}>Bank Account Status</h1>
+                <div className="bank-account-status__div" style={{ marginTop: '15px' }}>
+                  {!haveAlreadyConfirmedBankAccount && (
+                    <>
+                      <h1>
+                      To be able to begin receiving payments you must connect a Bank Account first
+                      </h1>
+                      <Button
+                        button="primary"
+                        className="membership_button"
+                        label={__('Connect a bank account')}
+                        icon={ICONS.FINANCE}
+                        navigate={'/$/account'}
+                        style={{ maxWidth: '254px' }}
+                      />
+                    </>
+                  )}
+                  {haveAlreadyConfirmedBankAccount && (
+                    <><h1>
+                      Congratulations, you have successfully linked your bank account and can receive tips and memberships
+                    </h1></>
+                  )}
+                </div>
+              </div>
 
 
             </TabPanel>

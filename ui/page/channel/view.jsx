@@ -236,7 +236,7 @@ function ChannelPage(props: Props) {
             icon={ICONS.UPGRADE}
             label={__('Membership')}
             title={__('Share this channel')}
-            navigate={`${urlForNavigation}/membership`}
+            navigate={`${channelUrlForNavigation}/membership`}
           />
           {!channelIsBlackListed && <ShareButton uri={uri} />}
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
