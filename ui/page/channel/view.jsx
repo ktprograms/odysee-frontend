@@ -81,6 +81,7 @@ function ChannelPage(props: Props) {
     unpublishedCollections,
     lang,
   } = props;
+
   const {
     push,
     goBack,
@@ -147,6 +148,8 @@ function ChannelPage(props: Props) {
   }
 
   let channelIsBlackListed = false;
+
+  const channelUrlForNavigation = formatLbryUrlForWeb(claim.canonical_url);
 
   if (claim && blackListedOutpointMap) {
     channelIsBlackListed = blackListedOutpointMap[`${claim.txid}:${claim.nout}`];
@@ -228,6 +231,13 @@ function ChannelPage(props: Props) {
               navigate={`/$/${PAGES.CHANNELS}`}
             />
           )}
+          <Button
+            button="alt"
+            icon={ICONS.UPGRADE}
+            label={__('Membership')}
+            title={__('Share this channel')}
+            navigate={`${urlForNavigation}/membership`}
+          />
           {!channelIsBlackListed && <ShareButton uri={uri} />}
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
           {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}

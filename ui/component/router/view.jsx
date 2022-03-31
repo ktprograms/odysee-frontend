@@ -80,6 +80,9 @@ const OdyseeMembershipPage = lazyImport(() =>
 const OdyseeMembershipsPage = lazyImport(() =>
   import('page/odyseeMemberships' /* webpackChunkName: "odyseeMembership" */)
 );
+const CreatorMembershipPage = lazyImport(() =>
+  import('page/creatorMembership' /* webpackChunkName: "creatorMembership" */)
+);
 const OwnComments = lazyImport(() => import('page/ownComments' /* webpackChunkName: "ownComments" */));
 const PasswordResetPage = lazyImport(() => import('page/passwordReset' /* webpackChunkName: "passwordReset" */));
 const PasswordSetPage = lazyImport(() => import('page/passwordSet' /* webpackChunkName: "passwordSet" */));
@@ -150,6 +153,7 @@ type PrivateRouteProps = Props & {
   isAuthenticated: boolean,
 };
 
+// private routes require authentication
 function PrivateRoute(props: PrivateRouteProps) {
   const { component: Component, isAuthenticated, ...rest } = props;
   const urlSearchParams = new URLSearchParams(props.location.search);
@@ -383,8 +387,10 @@ function AppRouter(props: Props) {
         <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
 
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
+        <Route path="/:claimName/membership" exact component={CreatorMembershipPage} />
         <Route path="/:claimName" exact component={ShowPage} />
         <Route path="/:claimName/:streamName" exact component={ShowPage} />
+
         <Route path="/*" component={FourOhFourPage} />
       </Switch>
     </React.Suspense>
