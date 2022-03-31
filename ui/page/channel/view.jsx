@@ -234,7 +234,14 @@ function ChannelPage(props: Props) {
           <Button
             button="alt"
             icon={ICONS.UPGRADE}
-            label={__('Membership')}
+            label={__('Membership Page')}
+            title={__('Share this channel')}
+            navigate={`${channelUrlForNavigation}/membership`}
+          />
+          <Button
+            button="alt"
+            icon={ICONS.UPGRADE}
+            label={__('Membership Modal')}
             title={__('Share this channel')}
             navigate={`${channelUrlForNavigation}/membership`}
           />
