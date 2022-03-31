@@ -60,7 +60,7 @@ type Props = {
   preferredCurrency: string,
 };
 
-export default function WalletSendTip(props: Props) {
+export default function JoinMembership(props: Props) {
   const {} = props;
 
   return (
@@ -68,11 +68,24 @@ export default function WalletSendTip(props: Props) {
       {/* if there is no LBC balance, show user frontend to get credits */}
       {/* if there is lbc, the main tip/boost gui with the 3 tabs at the top */}
       <Card
-        title='hello'
-        className={'wallet-send-tip-modal'}
+        title="Join Creator Membership"
+        className={'join-membership-modal'}
         subtitle={
           <>
-            <h1>Hello</h1>
+            <div className="section">
+              {/* tip fiat tab button */}
+              <TabSwitchButton label={__('Tier 1')} name={TAB_FIAT} />
+
+              {/* tip LBC tab button */}
+              <TabSwitchButton label={__('Tier 2')} name={TAB_LBC} />
+
+              {/* support LBC tab button */}
+              <TabSwitchButton label={__('Tier 3')} name={TAB_BOOST} />
+
+              <TabSwitchButton label={__('Tier 4')} name={TAB_BOOST} />
+
+              <TabSwitchButton label={__('Tier 5')} name={TAB_BOOST} />
+            </div>
           </>
         }
         actions={
@@ -93,3 +106,30 @@ export default function WalletSendTip(props: Props) {
     </Form>
   );
 }
+
+type TabButtonProps = {
+  icon: string,
+  label: string,
+  name: string,
+  isOnConfirmationPage: boolean,
+  activeTab: string,
+  setActiveTab: (string) => void,
+};
+
+const TabSwitchButton = (tabButtonProps: TabButtonProps) => {
+  const { icon, label, name, isOnConfirmationPage, activeTab, setActiveTab } = tabButtonProps;
+  return (
+    <Button
+      key={name}
+      icon={icon}
+      label={label}
+      button="alt"
+      onClick={() => {
+        const tipInputElement = document.getElementById('tip-input');
+        if (tipInputElement) tipInputElement.focus();
+        if (!isOnConfirmationPage) setActiveTab(name);
+      }}
+      className={classnames('button-toggle', { 'button-toggle--active': activeTab === name })}
+    />
+  );
+};
