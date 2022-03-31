@@ -41,7 +41,7 @@ export default function ClaimSupportButton(props: Props) {
         iconSize={iconToUse[currencyToUse].iconSize}
         label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
         requiresAuth
-        onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
+        onClick={() => doOpenModal(MODALS.JOIN_MEMBERSHIP, { uri, isSupport: true })}
       />
     </Tooltip>
   );

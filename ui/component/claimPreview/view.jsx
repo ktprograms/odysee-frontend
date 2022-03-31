@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import { isURIValid } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import { isChannelClaim } from 'util/claim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
@@ -157,6 +158,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     dragHandleProps,
     unavailableUris,
     showMemberBadge,
+    doOpenModal,
   } = props;
 
   const isMobile = useIsMobile();
@@ -454,19 +456,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                           <Button
                             button="alt"
                             icon={ICONS.UPGRADE}
-                            label={__('Membership Page')}
+                            label={__('Become A Member')}
                             title={__('Share this channel')}
                             style={{ marginRight: '5px' }}
-                            // navigate={`${channelUrlForNavigation}/membership`}
-                          />
-                        </div>
-                        <div className="button-group">
-                          <Button
-                            button="alt"
-                            icon={ICONS.UPGRADE}
-                            label={__('Membership Modal')}
-                            title={__('Share this channel')}
-                            style={{ marginRight: '5px' }}
+                            onClick={() => doOpenModal(MODALS.JOIN_MEMBERSHIP)}
+                            // onClick={() => console.log('hello')}
                             // navigate={`${channelUrlForNavigation}/membership`}
                           />
                         </div>

@@ -32,6 +32,7 @@ const MAP = Object.freeze({
   [MODALS.FIRST_REWARD]: lazyImport(() => import('modal/modalFirstReward' /* webpackChunkName: "modalFirstReward" */)),
   [MODALS.HIDE_RECOMMENDATION]: lazyImport(() => import('modal/modalHideRecommendation' /* webpackChunkName: "modalHideRecommendation" */)),
   [MODALS.IMAGE_UPLOAD]: lazyImport(() => import('modal/modalImageUpload' /* webpackChunkName: "modalImageUpload" */)),
+  [MODALS.JOIN_MEMBERSHIP]: lazyImport(() => import('modal/modalJoinMembership' /* webpackChunkName: "modalJoinMembership" */)),
   [MODALS.LIQUIDATE_SUPPORTS]: lazyImport(() => import('modal/modalSupportsLiquidate' /* webpackChunkName: "modalSupportsLiquidate" */)),
   [MODALS.MASS_TIP_UNLOCK]: lazyImport(() => import('modal/modalMassTipUnlock' /* webpackChunkName: "modalMassTipUnlock" */)),
   [MODALS.MEMBERSHIP_SPLASH]: lazyImport(() => import('modal/modalMembershipSplash' /* webpackChunkName: "modalMembershipSplash" */)),

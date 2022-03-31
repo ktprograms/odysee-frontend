@@ -11,7 +11,7 @@ import {
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { makeSelectCollectionIsMine } from 'redux/selectors/collections';
-
+import { doOpenModal } from 'redux/actions/app';
 import { doResolveUri } from 'redux/actions/claims';
 import { doFileGet } from 'redux/actions/file';
 import { selectBanStateForUri } from 'lbryinc';
@@ -56,6 +56,7 @@ const select = (state, props) => {
 const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
   getFile: (uri) => dispatch(doFileGet(uri, false)),
+  doOpenModal,
 });
 
 export default connect(select, perform)(ClaimPreview);
