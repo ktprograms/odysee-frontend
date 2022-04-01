@@ -107,3 +107,47 @@
   text-align: center;
   margin: 0 auto;
 }
+
+section.join-membership-modal {
+  max-width: 550px;
+}
+
+.join-membership-modal {
+  max-height: 475px;
+  overflow: scroll
+}
+
+.join-membership-modal__subheader {
+  color: #e1d6d6;
+}
+
+.join-membership-modal-information__div {
+  text-align: left;
+  padding: 19px;
+  max-width: 388px;
+  min-width: 350px;
+
+  .join-membership-modal-plan__header {
+    margin-top: 17px;
+    color: white;
+    margin-bottom: 7px;
+    font-size: 18px;
+  }
+
+  .join-membership-modal-plan__description {
+    margin-bottom: 12px;
+  }
+
+  .join-membership-modal-purchase__button {
+    margin-top: 32px;
+  }
+}
+
+.join-membership-modal-perks__li {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.join-membership-modal-perks > h1 {
+  color: white;
+}

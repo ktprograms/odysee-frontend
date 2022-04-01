@@ -3,8 +3,6 @@ import React from 'react';
 import { Modal } from 'modal/modal';
 import JoinMembership from 'component/joinMembership';
 
-console.log('running here!');
-
 type Props = {
   uri: string,
   claimIsMine: boolean,
@@ -21,7 +19,7 @@ class ModalJoinMembership extends React.PureComponent<Props> {
     const { uri, claimIsMine, isTipOnly, hasSelectedTab, customText, doHideModal, setAmount } = this.props;
 
     return (
-      <Modal onAborted={doHideModal} isOpen type="card">
+      <Modal className="join-membership-modal" onAborted={doHideModal} isOpen type="card">
         <JoinMembership />
       </Modal>
     );
