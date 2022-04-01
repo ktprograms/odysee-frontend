@@ -7,8 +7,6 @@ import { lazyImport } from 'util/lazyImport';
 import classnames from 'classnames';
 import { isURIValid } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
-import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
 import { isChannelClaim } from 'util/claim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
@@ -20,7 +18,7 @@ import UriIndicator from 'component/uriIndicator';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
 import ClaimTags from 'component/claimTags';
 import SubscribeButton from 'component/subscribeButton';
-import Button from 'component/button';
+import JoinMembershipButton from 'component/joinMembershipButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import ClaimSupportButton from 'component/claimSupportButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
@@ -158,7 +156,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     dragHandleProps,
     unavailableUris,
     showMemberBadge,
-    doOpenModal,
   } = props;
 
   const isMobile = useIsMobile();
@@ -453,16 +450,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     ) : (
                       <div className="claim-preview__primary-actions">
                         <div className="button-group">
-                          <Button
-                            button="alt"
-                            icon={ICONS.UPGRADE}
-                            label={__('Become A Member')}
-                            title={__('Share this channel')}
-                            style={{ marginRight: '5px' }}
-                            onClick={() => doOpenModal(MODALS.JOIN_MEMBERSHIP)}
-                            // onClick={() => console.log('hello')}
-                            // navigate={`${channelUrlForNavigation}/membership`}
-                          />
+                          <JoinMembershipButton />
                         </div>
                         {isChannelUri && !banState.muted && !claimIsMine && (
                           <SubscribeButton

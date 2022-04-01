@@ -7,6 +7,7 @@ import { YOUTUBE_STATUSES } from 'lbryinc';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
 import ShareButton from 'component/shareButton';
+import JoinMembershipButton from 'component/joinMembershipButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { useHistory } from 'react-router';
 import Button from 'component/button';
@@ -231,22 +232,9 @@ function ChannelPage(props: Props) {
               navigate={`/$/${PAGES.CHANNELS}`}
             />
           )}
-          <Button
-            button="alt"
-            icon={ICONS.UPGRADE}
-            label={__('Membership Page')}
-            title={__('Share this channel')}
-            navigate={`${channelUrlForNavigation}/membership`}
-          />
-          <Button
-            button="alt"
-            icon={ICONS.UPGRADE}
-            label={__('Membership Modal')}
-            title={__('Share this channel')}
-            navigate={`${channelUrlForNavigation}/membership`}
-          />
-          {!channelIsBlackListed && <ShareButton uri={uri} />}
+          <JoinMembershipButton />
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
+          {!channelIsBlackListed && <ShareButton uri={uri} />}
           {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
           {/* TODO: add channel collections <ClaimCollectionAddButton uri={uri} fileAction /> */}
           <ClaimMenuList uri={claim.permanent_url} inline isChannelPage />
