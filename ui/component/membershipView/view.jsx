@@ -1,7 +1,9 @@
 // @flow
 import { Form } from 'component/common/form';
+import * as ICONS from 'constants/icons';
 import Card from 'component/common/card';
 import React from 'react';
+import Button from 'component/button';
 
 type Props = {
   channel: string,
@@ -60,6 +62,25 @@ export default function JoinMembership(props: Props) {
                   </p>
                 ))}
               </div>
+
+              <Button
+                className="join-membership-modal-purchase__button"
+                icon={ICONS.DELETE}
+                button="primary"
+                type="submit"
+                disabled={false}
+                label={`Cancel Membership`}
+              />
+
+              <Button
+                className="join-membership-modal-purchase__button"
+                style={{ 'margin-left': '2rem' }}
+                icon={ICONS.CASH}
+                button="secondary"
+                type="submit"
+                disabled={false}
+                label={`View Membership History`}
+              />
             </div>
           </>
         }
