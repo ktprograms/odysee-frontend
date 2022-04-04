@@ -20,7 +20,7 @@ const stripeEnvironment = getStripeEnvironment();
 type Props = {};
 
 export default function JoinMembership(props: Props) {
-  const { claim } = props;
+  const { claim, isModal } = props;
 
   console.log('claim');
   console.log(claim);
@@ -141,7 +141,7 @@ export default function JoinMembership(props: Props) {
             <h1 className="join-membership-modal__subheader" style={{ marginBottom: '14px' }}>
               to exclusive content and perks
             </h1>
-            <div className="section">
+            <div className="section membership-modal-tab-buttons">
               {membershipTiers.map((membershipTier, index) => (
                 <>
                   {/* change tier button */}
@@ -160,7 +160,7 @@ export default function JoinMembership(props: Props) {
                 {membershipTiers[membershipIndex].description}
               </h1>
               <div className="join-membership-modal-perks">
-                <h1 style={{ marginTop: '30px' }}>Perks:</h1>
+                <h1 style={{ marginTop: '30px' }}>{ isModal ? 'Perks:' : 'Perks' }</h1>
                 {membershipTiers[membershipIndex].perks.map((tierPerk, i) => (
                   <>
                     <p>

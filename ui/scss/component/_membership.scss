@@ -135,9 +135,41 @@
   }
 }
 
-.tab__panel .join-membership-modal-information__div {
-  max-width: 100%;
-  min-width: 100%;
+// membership page tab from channel
+.tab__panel {
+  .join-membership-modal-information__div {
+    max-width: 100%;
+    min-width: 100%;
+  }
+
+  .join-membership-modal__subheader {
+    display: inline;
+  }
+
+  .join-membership-modal__subheader:nth-of-type(2) {
+    margin-left: 5px;
+  };
+
+  .card__header--between, .card__title-section {
+    display: block;
+  }
+
+  .card__first-pane, .join-membership-modal-information__div {
+    text-align: center;
+  }
+
+  .join-membership-modal-perks p {
+    text-align: left;
+  }
+
+  .join-membership-modal-perks {
+    max-width: 487px;
+    margin: 0 auto;
+  }
+
+  .membership-modal-tab-buttons {
+    margin-top: 10px;
+  }
 }
 
 .join-membership-modal-perks__li {

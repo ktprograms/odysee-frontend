@@ -14,6 +14,8 @@ type Props = {
 export default function JoinMembership(props: Props) {
   const { channel, duration, membership } = props;
 
+  const areSubscribed = true;
+
   const perkDescriptions = [
     {
       perkName: 'exclusiveAccess',
