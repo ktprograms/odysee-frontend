@@ -17,47 +17,57 @@ import WalletTipAmountSelector from 'component/walletTipAmountSelector';
 import { getStripeEnvironment } from 'util/stripe';
 const stripeEnvironment = getStripeEnvironment();
 
-type Props = {
-
-};
-
+type Props = {};
 
 export default function JoinMembership(props: Props) {
-  const {} = props;
+  const { claim } = props;
 
-  let membershipTiers = [{
-    displayName: 'Helping Hand',
-    description: 'You\'re doing your part, thank you!',
-    monthlyContributionInUSD: 5,
-    perks: ['exclusiveAccess', 'badge'],
-  }, {
-    displayName: 'Big-Time Supporter',
-    description: 'You are a true fan and are helping in a big way!',
-    monthlyContributionInUSD: 10,
-    perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis'],
-  }, {
-    displayName: 'Community MVP',
-    description: 'Where would this creator be without you? You are a true legend!',
-    monthlyContributionInUSD: 20,
-    perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis', 'custom-badge'],
-  }];
+  console.log('claim');
+  console.log(claim);
 
-  const perkDescriptions = [{
-    perkName: 'exclusiveAccess',
-    perkDescription: 'You will exclusive access to members-only content',
-  }, {
-    perkName: 'earlyAccess',
-    perkDescription: 'You will get early access to this creators content',
-  }, {
-    perkName: 'badge',
-    perkDescription: 'You will get a generic badge showing you are a supporter of this creator',
-  }, {
-    perkName: 'emojis',
-    perkDescription: 'You will get access to custom members-only emojis offered by the creator',
-  }, {
-    perkName: 'custom-badge',
-    perkDescription: 'You can choose a custom badge showing you are an MVP supporter',
-  }];
+  let membershipTiers = [
+    {
+      displayName: 'Helping Hand',
+      description: "You're doing your part, thank you!",
+      monthlyContributionInUSD: 5,
+      perks: ['exclusiveAccess', 'badge'],
+    },
+    {
+      displayName: 'Big-Time Supporter',
+      description: 'You are a true fan and are helping in a big way!',
+      monthlyContributionInUSD: 10,
+      perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis'],
+    },
+    {
+      displayName: 'Community MVP',
+      description: 'Where would this creator be without you? You are a true legend!',
+      monthlyContributionInUSD: 20,
+      perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis', 'custom-badge'],
+    },
+  ];
+
+  const perkDescriptions = [
+    {
+      perkName: 'exclusiveAccess',
+      perkDescription: 'You will exclusive access to members-only content',
+    },
+    {
+      perkName: 'earlyAccess',
+      perkDescription: 'You will get early access to this creators content',
+    },
+    {
+      perkName: 'badge',
+      perkDescription: 'You will get a generic badge showing you are a supporter of this creator',
+    },
+    {
+      perkName: 'emojis',
+      perkDescription: 'You will get access to custom members-only emojis offered by the creator',
+    },
+    {
+      perkName: 'custom-badge',
+      perkDescription: 'You can choose a custom badge showing you are an MVP supporter',
+    },
+  ];
 
   const [isOnConfirmationPage, setConfirmationPage] = React.useState(false);
 
@@ -68,7 +78,7 @@ export default function JoinMembership(props: Props) {
   const tabButtonProps = { isOnConfirmationPage, activeTab, setActiveTab, setMembershipIndex };
 
   return (
-    <Form >
+    <Form style={{ maxHeight: '475px' }}>
       {/* if there is no LBC balance, show user frontend to get credits */}
       {/* if there is lbc, the main tip/boost gui with the 3 tabs at the top */}
       <Card
@@ -77,19 +87,28 @@ export default function JoinMembership(props: Props) {
         subtitle={
           <>
             <h1 className="join-membership-modal__subheader">Join this creator's channel for access</h1>
-            <h1 className="join-membership-modal__subheader" style={{ marginBottom: '14px' }}>to exclusive content and perks</h1>
+            <h1 className="join-membership-modal__subheader" style={{ marginBottom: '14px' }}>
+              to exclusive content and perks
+            </h1>
             <div className="section">
               {membershipTiers.map((membershipTier, index) => (
                 <>
                   {/* change tier button */}
-                  <TabSwitchButton index={index} label={__('Tier ' + (index + 1))} name={`Tier${index + 1}`} {...tabButtonProps} />
+                  <TabSwitchButton
+                    index={index}
+                    label={__('Tier ' + (index + 1))}
+                    name={`Tier${index + 1}`}
+                    {...tabButtonProps}
+                  />
                 </>
               ))}
             </div>
             <div className="join-membership-modal-information__div">
               <h1 className="join-membership-modal-plan__header">{membershipTiers[membershipIndex].displayName}</h1>
-              <h1 className="join-membership-modal-plan__description">{membershipTiers[membershipIndex].description}</h1>
-              <div className="join-membership-modal-perks" >
+              <h1 className="join-membership-modal-plan__description">
+                {membershipTiers[membershipIndex].description}
+              </h1>
+              <div className="join-membership-modal-perks">
                 <h1 style={{ marginTop: '30px' }}>Perks:</h1>
                 {membershipTiers[membershipIndex].perks.map((tierPerk, i) => (
                   <>
@@ -100,9 +119,7 @@ export default function JoinMembership(props: Props) {
                           {tierPerk === globalPerk.perkName && (
                             <>
                               <ul>
-                                <li className="join-membership-modal-perks__li">
-                                  {globalPerk.perkDescription}
-                                </li>
+                                <li className="join-membership-modal-perks__li">{globalPerk.perkDescription}</li>
                               </ul>
                             </>
                           )}
@@ -140,7 +157,16 @@ type TabButtonProps = {
 };
 
 const TabSwitchButton = (tabButtonProps: TabButtonProps) => {
-  const { icon, label, name, isOnConfirmationPage, activeTab, setActiveTab, index, setMembershipIndex } = tabButtonProps;
+  const {
+    icon,
+    label,
+    name,
+    isOnConfirmationPage,
+    activeTab,
+    setActiveTab,
+    index,
+    setMembershipIndex,
+  } = tabButtonProps;
 
   return (
     <Button

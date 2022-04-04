@@ -32,6 +32,7 @@ const select = (state, props) => {
     activeChannelName,
     activeChannelId,
     balance: selectBalance(state),
+    claim,
     claimId,
     claimType,
     channelClaimId,

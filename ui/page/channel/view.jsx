@@ -241,7 +241,7 @@ function ChannelPage(props: Props) {
               navigate={`/$/${PAGES.CHANNELS}`}
             />
           )}
-          <JoinMembershipButton />
+          <JoinMembershipButton uri={uri} />
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
           {!channelIsBlackListed && <ShareButton uri={uri} />}
           {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}

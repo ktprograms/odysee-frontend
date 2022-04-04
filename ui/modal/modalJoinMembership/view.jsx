@@ -20,7 +20,7 @@ class ModalJoinMembership extends React.PureComponent<Props> {
 
     return (
       <Modal className="join-membership-modal" onAborted={doHideModal} isOpen type="card">
-        <JoinMembership />
+        <JoinMembership uri={uri} />
       </Modal>
     );
   }

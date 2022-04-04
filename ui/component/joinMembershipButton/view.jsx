@@ -18,7 +18,7 @@ export default function ShareButton(props: Props) {
       icon={ICONS.UPGRADE}
       label={__('Become A Member')}
       title={__('Share this channel')}
-      onClick={() => doOpenModal(MODALS.JOIN_MEMBERSHIP)}
+      onClick={() => doOpenModal(MODALS.JOIN_MEMBERSHIP, { uri })}
     />
   );
 }

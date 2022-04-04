@@ -450,7 +450,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     ) : (
                       <div className="claim-preview__primary-actions">
                         <div className="button-group">
-                          <JoinMembershipButton />
+                          <JoinMembershipButton uri={uri} />
                         </div>
                         {isChannelUri && !banState.muted && !claimIsMine && (
                           <SubscribeButton

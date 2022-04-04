@@ -80,7 +80,6 @@
   color: var(--color-text);
 }
 
-
 /** CREATOR MEMBERSHIPS PAGE **/
 
 .my-membership__div {
@@ -98,8 +97,6 @@
   }
 }
 
-
-
 /** MODAL **/
 
 .ReactModalPortal .join-membership-modal > .card__first-pane > .card__header--between > .card__title-section {
@@ -110,10 +107,6 @@
 
 .ReactModalPortal section.join-membership-modal {
   max-width: 550px;
-}
-
-.ReactModalPortal .join-membership-modal {
-  max-height: 475px;
 }
 
 .join-membership-modal__subheader {
