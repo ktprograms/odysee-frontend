@@ -114,7 +114,6 @@ export default function JoinMembership(props: Props) {
               </div>
               <Button
                 className="join-membership-modal-purchase__button"
-                autoFocus
                 icon={ICONS.UPGRADE}
                 button="primary"
                 type="submit"

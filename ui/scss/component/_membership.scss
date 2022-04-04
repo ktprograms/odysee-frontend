@@ -102,7 +102,7 @@
 
 /** MODAL **/
 
-.join-membership-modal > .card__first-pane > .card__header--between > .card__title-section {
+.ReactModalPortal .join-membership-modal > .card__first-pane > .card__header--between > .card__title-section {
   display: block;
   text-align: center;
   margin: 0 auto;
@@ -114,7 +114,6 @@
 
 .ReactModalPortal .join-membership-modal {
   max-height: 475px;
-  overflow: scroll
 }
 
 .join-membership-modal__subheader {
@@ -141,6 +140,11 @@
   .join-membership-modal-purchase__button {
     margin-top: 32px;
   }
+}
+
+.tab__panel .join-membership-modal-information__div {
+  max-width: 100%;
+  min-width: 100%;
 }
 
 .join-membership-modal-perks__li {
