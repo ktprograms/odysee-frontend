@@ -30,6 +30,7 @@ import PlaceholderTx from 'static/img/placeholderTx.gif';
 import Tooltip from 'component/common/tooltip';
 import { toCompactNotation } from 'util/string';
 import JoinMembership from 'component/joinMembership';
+import MembershipView from 'component/membershipView';
 
 export const PAGE_VIEW_QUERY = `view`;
 export const DISCUSSION_PAGE = `discussion`;
@@ -227,6 +228,27 @@ function ChannelPage(props: Props) {
     );
   }
 
+  let membershipTiers = [
+    {
+      displayName: 'Helping Hand',
+      description: "You're doing your part, thank you!",
+      monthlyContributionInUSD: 5,
+      perks: ['exclusiveAccess', 'badge'],
+    },
+    {
+      displayName: 'Big-Time Supporter',
+      description: 'You are a true fan and are helping in a big way!',
+      monthlyContributionInUSD: 10,
+      perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis'],
+    },
+    {
+      displayName: 'Community MVP',
+      description: 'Where would this creator be without you? You are a true legend!',
+      monthlyContributionInUSD: 20,
+      perks: ['exclusiveAccess', 'earlyAccess', 'badge', 'emojis', 'custom-badge'],
+    },
+  ];
+
   const hasMembership = true;
 
   return (
@@ -349,7 +371,13 @@ function ChannelPage(props: Props) {
               <ChannelAbout uri={uri} />
             </TabPanel>
 
-            <TabPanel>{currentView === PAGE.MEMBERSHIP && hasMembership ? <JoinMembership /> : <></>}</TabPanel>
+            <TabPanel>
+              {currentView === PAGE.MEMBERSHIP && hasMembership ? (
+                <MembershipView channel={channelName} duration={'73 days'} membership={membershipTiers[2]} />
+              ) : (
+                <JoinMembership />
+              )}
+            </TabPanel>
 
             <TabPanel>
               {(showDiscussion || currentView === PAGE.DISCUSSION) && <ChannelDiscussion uri={uri} />}
