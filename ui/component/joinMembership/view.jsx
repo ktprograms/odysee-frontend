@@ -69,13 +69,64 @@ export default function JoinMembership(props: Props) {
     },
   ];
 
+  // setup variables for tip API
+  const channelClaimId = claim ? (claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id) : undefined;
+  const tipChannelName = claim ? (claim.signing_channel ? claim.signing_channel.name : claim.name) : undefined;
+
   const [isOnConfirmationPage, setConfirmationPage] = React.useState(false);
+
+  const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
+  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(); // dont persist because it needs to be calc'd per creator
 
   const [membershipIndex, setMembershipIndex] = React.useState(0);
 
   const [activeTab, setActiveTab] = React.useState('Tier1');
 
   const tabButtonProps = { isOnConfirmationPage, activeTab, setActiveTab, setMembershipIndex };
+
+  // check if user has a payment method saved
+  React.useEffect(() => {
+    if (!stripeEnvironment) return;
+
+    Lbryio.call(
+      'customer',
+      'status',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    ).then((customerStatusResponse) => {
+      const defaultPaymentMethodId =
+        customerStatusResponse.Customer &&
+        customerStatusResponse.Customer.invoice_settings &&
+        customerStatusResponse.Customer.invoice_settings.default_payment_method &&
+        customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
+
+      setHasSavedCard(Boolean(defaultPaymentMethodId));
+    });
+  }, [setHasSavedCard]);
+
+  // check if creator has a tip account saved
+  React.useEffect(() => {
+    if (!stripeEnvironment) return;
+
+    Lbryio.call(
+      'account',
+      'check',
+      {
+        channel_claim_id: channelClaimId,
+        channel_name: tipChannelName,
+        environment: stripeEnvironment,
+      },
+      'post'
+    )
+      .then((accountCheckResponse) => {
+        if (accountCheckResponse === true && canReceiveFiatTip !== true) {
+          setCanReceiveFiatTip(true);
+        }
+      })
+      .catch(() => {});
+  }, [canReceiveFiatTip, channelClaimId, tipChannelName]);
 
   return (
     <Form style={{ maxHeight: '475px' }}>
