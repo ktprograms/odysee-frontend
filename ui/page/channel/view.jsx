@@ -372,7 +372,7 @@ function ChannelPage(props: Props) {
             </TabPanel>
 
             <TabPanel>
-              {currentView === PAGE.MEMBERSHIP && 1 == 2 ? (
+              {currentView === PAGE.MEMBERSHIP && 1 == 1 ? (
                 <MembershipView channel={channelName} duration={'73 days'} membership={membershipTiers[2]} />
               ) : (
                 <JoinMembership uri={uri} />

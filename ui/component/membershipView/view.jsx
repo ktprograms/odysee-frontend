@@ -42,11 +42,13 @@ export default function JoinMembership(props: Props) {
   return (
     <Form style={{ maxHeight: '475px' }}>
       <Card
-        title={`You have been a supporter of ${channel} for ${duration} now, I am sure they appreciate the support!`}
+        title={`Your ${channel} membership`}
         className={'join-membership-modal'}
         subtitle={
           <>
             <div className="join-membership-modal-information__div">
+              <h1 className="join-membership-support-time__header">You have been supporting {channel} for 2 months</h1>
+              <h1 className="join-membership-support-time__header">I am sure they appreciate it!</h1>
               <h1 className="join-membership-modal-plan__header">Your tier: {membership.displayName}</h1>
               <h1 className="join-membership-modal-plan__description">{membership.description}</h1>
               <div className="join-membership-modal-perks">
@@ -67,21 +69,21 @@ export default function JoinMembership(props: Props) {
 
               <Button
                 className="join-membership-modal-purchase__button"
-                icon={ICONS.DELETE}
-                button="primary"
-                type="submit"
-                disabled={false}
-                label={`Cancel Membership`}
-              />
-
-              <Button
-                className="join-membership-modal-purchase__button"
-                style={{ 'margin-left': '2rem' }}
-                icon={ICONS.CASH}
+                icon={ICONS.FINANCE}
                 button="secondary"
                 type="submit"
                 disabled={false}
                 label={`View Membership History`}
+              />
+
+              <Button
+                className="join-membership-modal-purchase__button"
+                style={{ 'margin-left': '1rem' }}
+                icon={ICONS.DELETE}
+                button="secondary"
+                type="submit"
+                disabled={false}
+                label={`Cancel Membership`}
               />
             </div>
           </>
