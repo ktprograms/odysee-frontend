@@ -108,11 +108,11 @@
   margin: 0 auto;
 }
 
-section.join-membership-modal {
+.ReactModalPortal section.join-membership-modal {
   max-width: 550px;
 }
 
-.join-membership-modal {
+.ReactModalPortal .join-membership-modal {
   max-height: 475px;
   overflow: scroll
 }
