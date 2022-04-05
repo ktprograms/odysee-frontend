@@ -66,6 +66,8 @@ export default function JoinMembership(props: Props) {
                 ))}
               </div>
 
+              <h1 className="join-membership-tab-renewal-date__header">Your membership will renew on April 15, 2022 (15 days)</h1>
+
               <Button
                 className="join-membership-modal-purchase__button"
                 icon={ICONS.FINANCE}

@@ -186,8 +186,11 @@ const MembershipsPage = (props: Props) => {
   let localMembershipPageUrl;
   let remoteMembershipPageUrl;
   if (activeChannelClaim) {
-    remoteMembershipPageUrl = `${URL}${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}/membership`;
-    localMembershipPageUrl = `${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}/membership`;
+
+
+
+    remoteMembershipPageUrl = `${URL}${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}?view=membership`;
+    localMembershipPageUrl = `${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}?view=membership`;
   }
 
   const handleChange = (event) => {
@@ -329,7 +332,7 @@ const MembershipsPage = (props: Props) => {
                 className="membership_button"
                 label={__('Connect a bank account')}
                 icon={ICONS.FINANCE}
-                navigate={'/$/account'}
+                navigate={'$/settings/tip_account'}
                 style={{ maxWidth: '254px' }}
               />
             </>
