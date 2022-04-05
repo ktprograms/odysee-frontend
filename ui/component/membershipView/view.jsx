@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function JoinMembership(props: Props) {
-  const { channel, duration, membership } = props;
+  const { channel, duration, membership, isModal } = props;
 
   const areSubscribed = true;
 
@@ -52,8 +52,7 @@ export default function JoinMembership(props: Props) {
               <h1 className="join-membership-modal-plan__header">Your tier: {membership.displayName}</h1>
               <h1 className="join-membership-modal-plan__description">{membership.description}</h1>
               <div className="join-membership-modal-perks">
-                <h1 style={{ marginTop: '30px' }}>Perks:</h1>
-                {membership.perks.map((tierPerk, i) => (
+                <h1 style={{ marginTop: '30px' }}>{ isModal ? 'Perks:' : 'Perks' }</h1>                {membership.perks.map((tierPerk, i) => (
                   <p key={tierPerk}>
                     {perkDescriptions.map(
                       (globalPerk, i) =>
