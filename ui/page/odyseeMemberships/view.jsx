@@ -39,10 +39,10 @@ type Props = {
 };
 
 const MembershipsPage = (props: Props) => {
-
   const {
     openModal,
     activeChannelClaim,
+    doToast,
   } = props;
 
   const {
@@ -154,6 +154,12 @@ const MembershipsPage = (props: Props) => {
   const deleteMembership = function (tierIndex) {
     let membershipsBeforeDeletion = creatorMemberships;
 
+    const amountOfMembershipsCurrently = creatorMemberships.length;
+    if (amountOfMembershipsCurrently === 1) {
+      const displayString = __('You must have at least one tier for your membership options');
+      return doToast({ message: displayString, isError: true });
+    }
+
     openModal(MODALS.CONFIRM_DELETE_MEMBERSHIP, {
       setCreatorMemberships,
       membershipsBeforeDeletion,
@@ -186,9 +192,6 @@ const MembershipsPage = (props: Props) => {
   let localMembershipPageUrl;
   let remoteMembershipPageUrl;
   if (activeChannelClaim) {
-
-
-
     remoteMembershipPageUrl = `${URL}${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}?view=membership`;
     localMembershipPageUrl = `${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}?view=membership`;
   }
@@ -245,13 +248,13 @@ const MembershipsPage = (props: Props) => {
           defaultValue={tier.displayName}
         />
         {/* could be cool to have markdown */}
-        {/*<FormField*/}
-        {/*  type="markdown"*/}
-        {/*  name="tier_description"*/}
-        {/*  label={__('Tier Description')}*/}
-        {/*  placeholder={__('Description of your tier')}*/}
-        {/*  value={tier.description}*/}
-        {/*/>*/}
+        {/* <FormField */}
+        {/*  type="markdown" */}
+        {/*  name="tier_description" */}
+        {/*  label={__('Tier Description')} */}
+        {/*  placeholder={__('Description of your tier')} */}
+        {/*  value={tier.description} */}
+        {/* /> */}
         <FormField
           type="textarea"
           rows="10"
@@ -352,7 +355,7 @@ const MembershipsPage = (props: Props) => {
 
       <div className="memberships-header" style={{ marginBottom: 'var(--spacing-xl)'}}>
         <h1 style={{ fontSize: '24px', marginBottom: 'var(--spacing-s)' }}>Create Your Membership Tiers</h1>
-        <h2 style={{ fontSize: '18px' }}>Here you will be able to define the tiers that your viewers can subscribe to</h2>
+        <h2 style={{ fontSize: '18px' }}>Define the tiers that your viewers can subscribe to</h2>
       </div>
 
       {/* list through different tiers */}
@@ -365,7 +368,7 @@ const MembershipsPage = (props: Props) => {
           )}
           {isEditing !== membershipIndex && (
             <div style={{ marginBottom: 'var(--spacing-xxl)'}}>
-              <div style={{ marginBottom: 'var(--spacing-s)'}}>Tier Name: {membershipTier.displayName}</div>
+              <div style={{ marginBottom: 'var(--spacing-s)', fontSize: '1.1rem' }}>{membershipIndex + 1}) Tier Name: {membershipTier.displayName}</div>
               <h1 style={{ marginBottom: 'var(--spacing-s)'}}>{membershipTier.description}</h1>
               <h1 style={{ marginBottom: 'var(--spacing-s)'}}>Monthly Pledge: ${membershipTier.monthlyContributionInUSD}</h1>
               {membershipTier.perks.map((tierPerk, i) => (
@@ -414,7 +417,7 @@ const MembershipsPage = (props: Props) => {
       { creatorMemberships.length < 5 && (
         <>
           <Button
-            button="alt"
+            button="primary"
             onClick={(e) => addMembership()}
             className="add-membership-button"
             label={__('Add Tier')}
@@ -447,7 +450,7 @@ const MembershipsPage = (props: Props) => {
 
               <h1 style={{ marginTop: '10px' }}> When you do join a membership you will be able to see it here </h1>
 
-              {/*<h1 style={{ marginTop: '10px' }}> You can find some creators to support on the membership page here </h1>*/}
+              {/* <h1 style={{ marginTop: '10px' }}> You can find some creators to support on the membership page here </h1> */}
             </TabPanel>
             <TabPanel>
               <h1>My Memberships</h1>
