@@ -84,6 +84,18 @@ export default function JoinMembership(props: Props) {
 
   const tabButtonProps = { isOnConfirmationPage, activeTab, setActiveTab, setMembershipIndex };
 
+  // if a membership can't be purchased from the creator
+  const shouldDisableSelector = !hasCardSaved || !canReceiveFiatTip;
+
+  function membershipJoin() {
+    if (!isOnConfirmationPage) {
+      setConfirmationPage(true);
+    } else {
+      // doesn't exist yet
+      // doJoinCreatorMembership();
+    }
+  }
+
   // check if user has a payment method saved
   React.useEffect(() => {
     if (!stripeEnvironment) return;
@@ -136,60 +148,109 @@ export default function JoinMembership(props: Props) {
         title="Join Creator Membership"
         className={'join-membership-modal'}
         subtitle={
-          <>
-            <h1 className="join-membership-modal__subheader">Join this creator's channel for access</h1>
-            <h1 className="join-membership-modal__subheader" style={{ marginBottom: '14px' }}>
-              to exclusive content and perks
-            </h1>
-            <div className="section membership-modal-tab-buttons">
-              {membershipTiers.map((membershipTier, index) => (
-                <>
-                  {/* change tier button */}
-                  <TabSwitchButton
-                    index={index}
-                    label={__('Tier ' + (index + 1))}
-                    name={`Tier${index + 1}`}
-                    {...tabButtonProps}
-                  />
-                </>
-              ))}
-            </div>
-            <div className="join-membership-modal-information__div">
-              <h1 className="join-membership-modal-plan__header">{membershipTiers[membershipIndex].displayName}</h1>
-              <h1 className="join-membership-modal-plan__description">
-                {membershipTiers[membershipIndex].description}
+          isOnConfirmationPage ? (
+            <>
+              <div className="section section--padded card--inline confirm__wrapper">
+                <div className="section">
+                  <div className="confirm__label">{__('Subscribing to:')}</div>
+                  <div className="confirm__value">{tipChannelName}</div>
+                  <div className="confirm__label">{__('On tier: ')}</div>
+                  <div className="confirm__value">{membershipTiers[membershipIndex].displayName}</div>
+                  <div className="confirm__label">{__('For:')}</div>
+                  <div className="confirm__value">${membershipTiers[membershipIndex].monthlyContributionInUSD}</div>
+                  <div className="confirm__label">{__('You get: ')}</div>
+                  {membershipTiers[membershipIndex].perks.map((tierPerk, i) => (
+                    <>
+                      <p>
+                        {/* list all the perks */}
+                        {perkDescriptions.map((globalPerk, i) => (
+                          <>
+                            {tierPerk === globalPerk.perkName && (
+                              <>
+                                <ul>
+                                  <li className="join-membership-modal-perks__li">{globalPerk.perkDescription}</li>
+                                </ul>
+                              </>
+                            )}
+                          </>
+                        ))}
+                      </p>
+                    </>
+                  ))}
+                </div>
+              </div>
+
+              <div className="section__actions">
+                <Button autoFocus onClick={() => setConfirmationPage(false)} button="primary" label={__('Confirm')} />
+                <Button button="link" label={__('Cancel')} onClick={() => setConfirmationPage(false)} />
+              </div>
+            </>
+          ) : (
+            <>
+              <h1 className="join-membership-modal__subheader">Join this creator's channel for access</h1>
+              <h1 className="join-membership-modal__subheader" style={{ marginBottom: '14px' }}>
+                to exclusive content and perks
               </h1>
-              <div className="join-membership-modal-perks">
-                <h1 style={{ marginTop: '30px' }}>{ isModal ? 'Perks:' : 'Perks' }</h1>
-                {membershipTiers[membershipIndex].perks.map((tierPerk, i) => (
+              <div className="section membership-modal-tab-buttons">
+                {membershipTiers.map((membershipTier, index) => (
                   <>
-                    <p>
-                      {/* list all the perks */}
-                      {perkDescriptions.map((globalPerk, i) => (
-                        <>
-                          {tierPerk === globalPerk.perkName && (
-                            <>
-                              <ul>
-                                <li className="join-membership-modal-perks__li">{globalPerk.perkDescription}</li>
-                              </ul>
-                            </>
-                          )}
-                        </>
-                      ))}
-                    </p>
+                    {/* change tier button */}
+                    <TabSwitchButton
+                      index={index}
+                      label={__('Tier ' + (index + 1))}
+                      name={`Tier${index + 1}`}
+                      {...tabButtonProps}
+                    />
                   </>
                 ))}
               </div>
+              <div className="join-membership-modal-information__div">
+                <h1 className="join-membership-modal-plan__header">{membershipTiers[membershipIndex].displayName}</h1>
+                <h1 className="join-membership-modal-plan__description">
+                  {membershipTiers[membershipIndex].description}
+                </h1>
+                <div className="join-membership-modal-perks">
+                  <h1 style={{ marginTop: '30px' }}>{isModal ? 'Perks:' : 'Perks'}</h1>
+                  {membershipTiers[membershipIndex].perks.map((tierPerk, i) => (
+                    <>
+                      <p>
+                        {/* list all the perks */}
+                        {perkDescriptions.map((globalPerk, i) => (
+                          <>
+                            {tierPerk === globalPerk.perkName && (
+                              <>
+                                <ul>
+                                  <li className="join-membership-modal-perks__li">{globalPerk.perkDescription}</li>
+                                </ul>
+                              </>
+                            )}
+                          </>
+                        ))}
+                      </p>
+                    </>
+                  ))}
+                </div>
+              </div>
+
+              {/* help message */}
+              {!hasCardSaved && (
+                <div className={'help add-a-card-help-message'}>
+                  <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
+                  {' ' + __('To Become a Channel Member')}
+                </div>
+              )}
+
               <Button
                 className="join-membership-modal-purchase__button"
                 icon={ICONS.UPGRADE}
                 button="primary"
                 type="submit"
-                disabled={false}
+                disabled={shouldDisableSelector}
                 label={`Signup for $${membershipTiers[membershipIndex].monthlyContributionInUSD} a month`}
+                onClick={membershipJoin}
               />
-            </div>
-          </>
+            </>
+          )
         }
       />
     </Form>
