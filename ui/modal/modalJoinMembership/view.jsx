@@ -12,15 +12,16 @@ type Props = {
   customText?: string,
   doHideModal: () => void,
   setAmount?: (number) => void,
+  claim: any,
 };
 
 class ModalJoinMembership extends React.PureComponent<Props> {
   render() {
-    const { uri, claimIsMine, isTipOnly, hasSelectedTab, customText, doHideModal, setAmount } = this.props;
+    const { claim, uri, claimIsMine, isTipOnly, hasSelectedTab, customText, doHideModal, setAmount } = this.props;
 
     return (
       <Modal className="join-membership-modal" onAborted={doHideModal} isOpen type="card">
-        <JoinMembership uri={uri} isModal />
+        <JoinMembership uri={uri} claim={claim} isModal closeModal={doHideModal} />
       </Modal>
     );
   }

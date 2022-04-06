@@ -1796,7 +1796,7 @@
     prop-types "^15.7.2"
     tslib "^1.10.0"
 
-"@reach/tabs@^0.6.5":
+"@reach/tabs@^0.16.4":
   version "0.16.4"
   resolved "https://registry.yarnpkg.com/@reach/tabs/-/tabs-0.16.4.tgz#7da85e46f64052bdd1c0f9582f900e379b098ac5"
   integrity sha512-4EK+1U0OoLfg2tJ1BSZf6/tx0hF5vlXKxY7qB//bPWtlIh9Xfp/aSDIdspFf3xS8MjtKeb6IVmo5UAxDMq85ZA==
