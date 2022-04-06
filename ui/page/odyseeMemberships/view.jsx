@@ -22,10 +22,10 @@ let stripeEnvironment = getStripeEnvironment();
 const TAB_QUERY = 'tab';
 
 const TABS = {
-  CREATE_TIERS: 'tiers',
-  PAYOUT: 'payout',
-  BALANCE: 'balance',
   MY_MEMBERSHIPS: 'my_memberships',
+  CREATE_TIERS: 'create_tiers',
+  MY_SUPPORTERS: 'my_supporters',
+  MY_PLEDGES: 'my_pledges',
 };
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -70,38 +70,45 @@ const MembershipsPage = (props: Props) => {
   const urlParams = new URLSearchParams(search);
 
   // if tiers are saved, then go to balance, otherwise go to tiers
-  const currentView = urlParams.get(TAB_QUERY) || TABS.CREATE_TIERS;
+  const currentView = urlParams.get(TAB_QUERY) || TABS.MY_MEMBERSHIPS;
 
+  // based on query param or default, update value which will determine which tab to show
   let tabIndex;
   switch (currentView) {
-    case TABS.CREATE_TIERS:
+    case TABS.MY_MEMBERSHIPS:
       tabIndex = 0;
       break;
-    case TABS.PAYOUT:
+    case TABS.CREATE_TIERS:
       tabIndex = 1;
       break;
-    case TABS.BALANCE:
+    case TABS.MY_SUPPORTERS:
       tabIndex = 2;
+      // if already have a bank account, go to tab 2, otherwise tab 3
+      // haveAlreadyConfirmedBankAccount ? tabIndex = 2 : tabIndex = 3;
       break;
-    case TABS.MY_MEMBERSHIPS:
+    case TABS.MY_PLEDGES:
       tabIndex = 3;
+      // haveAlreadyConfirmedBankAccount ? tabIndex = 3 : tabIndex = 2;
+
+      // haveAlreadyConfirmedBankAccount ? tabIndex = 2 : tabIndex = 3;
       break;
     default:
       tabIndex = 0;
       break;
   }
 
+  // change the url based on the tab index value
   function onTabChange(newTabIndex) {
     let url = `/$/${PAGES.CREATOR_MEMBERSHIPS}?`;
 
     if (newTabIndex === 0) {
-      url += `${TAB_QUERY}=${TABS.CREATE_TIERS}`;
-    } else if (newTabIndex === 1) {
-      url += `${TAB_QUERY}=${TABS.PAYOUT}`;
-    } else if (newTabIndex === 2) {
-      url += `${TAB_QUERY}=${TABS.BALANCE}`;
-    } else if (newTabIndex === 3) {
       url += `${TAB_QUERY}=${TABS.MY_MEMBERSHIPS}`;
+    } else if (newTabIndex === 1) {
+      url += `${TAB_QUERY}=${TABS.CREATE_TIERS}`;
+    } else if (newTabIndex === 2) {
+      url += `${TAB_QUERY}=${TABS.MY_SUPPORTERS}`;
+    } else if (newTabIndex === 3) {
+      url += `${TAB_QUERY}=${TABS.MY_PLEDGES}`;
     }
     push(url);
   }
@@ -435,6 +442,7 @@ const MembershipsPage = (props: Props) => {
           <TabList className="tabs__list--collection-edit-page">
             <Tab>{__('My Memberships')}</Tab>
             <Tab>{__('Create Tiers')}</Tab>
+            { haveAlreadyConfirmedBankAccount && <Tab>{__('My Supporters')}</Tab>}
             <Tab>{__('My Pledges')}</Tab>
           </TabList>
           <TabPanels>
@@ -445,15 +453,20 @@ const MembershipsPage = (props: Props) => {
             <TabPanel>
               {createTiers}
             </TabPanel>
+            { haveAlreadyConfirmedBankAccount && (
+              <TabPanel>
+                <h1 style={{ marginTop: '10px' }}> Here's some info about your supporters </h1>
+
+                {/* <h1 style={{ marginTop: '10px' }}> You can find some creators to support on the membership page here </h1> */}
+              </TabPanel>
+            )}
             <TabPanel>
               <h1 style={{ marginTop: '10px' }}> You are not currently supporting any creators </h1>
 
               <h1 style={{ marginTop: '10px' }}> When you do join a membership you will be able to see it here </h1>
 
               {/* <h1 style={{ marginTop: '10px' }}> You can find some creators to support on the membership page here </h1> */}
-            </TabPanel>
-            <TabPanel>
-              <h1>My Memberships</h1>
+
             </TabPanel>
           </TabPanels>
         </Tabs>
