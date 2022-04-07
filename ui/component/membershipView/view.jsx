@@ -24,7 +24,7 @@ export default function JoinMembership(props: Props) {
 
   const areSubscribed = true;
 
-  const perkDescriptions = [
+  const perkDescriptions = window.created_tiers || [
     {
       perkName: 'exclusiveAccess',
       perkDescription: 'You have exclusive access to members-only content',
@@ -101,7 +101,8 @@ export default function JoinMembership(props: Props) {
         className={'join-membership-modal'}
         subtitle={
           <>
-            {activeMemberships?.Membership?.channel_name !== `@${channel}` ? (
+            {/*{activeMemberships?.Membership?.channel_name !== `@${channel}` ? (*/}
+              {1 == 2 ? (
               <></>
             ) : (
               <>

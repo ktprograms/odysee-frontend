@@ -65,6 +65,23 @@ const MembershipsPage = (props: Props) => {
     }
   })();
 
+  // TODO: replace with API call
+  const yourSupporters = [{
+    channelName: '@test35234',
+    tierName: 'Community MVP',
+    supportAmountPerMonth: '20',
+    currency: 'USD',
+    monthsOfSupport: 2,
+  }];
+
+  // TODO: replace with API call
+  const yourPledges = [{
+    channelName: '@test35234',
+    tierName: 'Community MVP',
+    supportAmountPerMonth: '20',
+    currency: 'USD',
+  }]
+
   const [haveAlreadyConfirmedBankAccount, setHaveAlreadyConfirmedBankAccount] = React.useState(false);
 
   const urlParams = new URLSearchParams(search);
@@ -257,10 +274,6 @@ const MembershipsPage = (props: Props) => {
         {/* could be cool to have markdown */}
         {/* <FormField */}
         {/*  type="markdown" */}
-        {/*  name="tier_description" */}
-        {/*  label={__('Tier Description')} */}
-        {/*  placeholder={__('Description of your tier')} */}
-        {/*  value={tier.description} */}
         {/* /> */}
         <FormField
           type="textarea"
@@ -453,18 +466,75 @@ const MembershipsPage = (props: Props) => {
             <TabPanel>
               {createTiers}
             </TabPanel>
+            {/** your supporters **/}
             <TabPanel>
-              <h1 style={{ marginTop: '10px' }}> Here's some info about your supporters </h1>
+              <table className="table table--transactions">
+                <thead>
+                  <tr>
+                    <th className="date-header">Supporter Channel Name</th>
+                    <th className="channelName-header">Membership Tier</th>
+                    <th className="location-header">Support Amount</th>
+                    <th className="channelName-header">Total Supporting Time</th>
+                    <th className="amount-header">Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    {yourSupporters.map((supporter, i) => (
+                      <>
+                        <td><span dir="auto" className="button__label">@test35234</span></td>
+                        <td>Community MVP</td>
+                        <td>$20 USD / Month</td>
+                        <td>2 Months</td>
+                        <td><span dir="auto" className="button__label">See Details</span></td>
+                      </>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+
+              {/*<h1 style={{ marginTop: '10px' }}> Here's some info about your supporters </h1>*/}
 
               {/* <h1 style={{ marginTop: '10px' }}> You can find some creators to support on the membership page here </h1> */}
             </TabPanel>
+            {/** your pledges tab **/}
             <TabPanel>
-              <h1 style={{ marginTop: '10px' }}> You are not currently supporting any creators </h1>
+              { yourPledges.length > 0 && (
+                <table className="table table--transactions">
+                  <thead>
+                  <tr>
+                    <th className="date-header">Channel You're Supporting</th>
+                    <th className="channelName-header">Membership Tier</th>
+                    <th className="channelName-header">Total Supporting Time</th>
+                    <th className="location-header">Support Amount</th>
+                    <th className="amount-header">Details</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    {yourPledges.map((supporter, i) => (
+                      <>
+                        <td><span dir="auto" className="button__label">@test35234</span></td>
+                        <td>Community MVP</td>
+                        <td>2 Months</td>
+                        <td>$20 USD / Month</td>
+                        <td><span dir="auto" className="button__label">See Details</span></td>
+                      </>
+                    ))}
+                  </tr>
+                  </tbody>
+                </table>
+              )}
 
-              <h1 style={{ marginTop: '10px' }}> When you do join a membership you will be able to see it here </h1>
+              { yourPledges.length === 0 && (
+                <>
+                  <h1 style={{ marginTop: '10px' }}> You are not currently supporting any creators </h1>
 
-              {/* <h1 style={{ marginTop: '10px' }}> You can find some creators to support on the membership page here </h1> */}
+                  <h1 style={{ marginTop: '10px' }}> When you do join a membership you will be able to see it here </h1>
 
+                  {/* <h1 style={{ marginTop: '10px' }}> You can find some creators to support on the membership page here </h1> */}
+                </>
+              )}
             </TabPanel>
           </TabPanels>
         </Tabs>
