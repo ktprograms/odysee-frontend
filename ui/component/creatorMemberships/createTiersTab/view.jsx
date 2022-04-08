@@ -1,45 +1,19 @@
 /* eslint-disable no-console */
 // @flow
 import React from 'react';
-import Page from 'component/page';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import Button from 'component/button';
 import { useHistory } from 'react-router';
-import * as PAGES from 'constants/pages';
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { FormField } from 'component/common/form';
-import { Lbryio } from 'lbryinc';
-import { getStripeEnvironment } from 'util/stripe';
 import moment from 'moment';
-import CopyableText from 'component/copyableText';
-import ChannelSelector from 'component/channelSelector';
-import { formatLbryUrlForWeb } from 'util/url';
-import { URL } from 'config';
-import { lbryProxy as Lbry } from '../../../web/lbry';
-
-let stripeEnvironment = getStripeEnvironment();
-
-const TAB_QUERY = 'tab';
-
-const TABS = {
-  MY_MEMBERSHIPS: 'my_memberships',
-  CREATE_TIERS: 'create_tiers',
-  MY_SUPPORTERS: 'my_supporters',
-  MY_PLEDGES: 'my_pledges',
-};
-
-const isDev = process.env.NODE_ENV !== 'production';
-
-let log = (input) => {};
-if (isDev) log = console.log;
 
 type Props = {
   openModal: (string, {}) => void,
   activeChannelClaim: ?ChannelClaim,
 };
 
-export default function CreatorAnalytics(props: Props) {
+function CreateTiersTab(props: Props) {
   const {
     openModal,
     activeChannelClaim,
@@ -309,3 +283,5 @@ export default function CreatorAnalytics(props: Props) {
     </div>
   );
 };
+
+export default CreateTiersTab;

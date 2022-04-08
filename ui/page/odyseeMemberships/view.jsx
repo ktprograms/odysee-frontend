@@ -12,11 +12,13 @@ import { FormField } from 'component/common/form';
 import { Lbryio } from 'lbryinc';
 import { getStripeEnvironment } from 'util/stripe';
 import moment from 'moment';
-import CopyableText from 'component/copyableText';
-import ChannelSelector from 'component/channelSelector';
 import { formatLbryUrlForWeb } from 'util/url';
 import { URL } from 'config';
 import { getThumbnailFromClaim } from 'util/claim';
+import CreateTiersTab from 'component/creatorMemberships/createTiersTab';
+import CreatorMembershipsTab from 'component/creatorMemberships/creatorMembershipsTab';
+
+console.log(CreatorMembershipsTab);
 
 let stripeEnvironment = getStripeEnvironment();
 
@@ -53,26 +55,9 @@ const MembershipsPage = (props: Props) => {
     push,
   } = useHistory();
 
-  const [haveAlreadyConfirmedBankAccount, setHaveAlreadyConfirmedBankAccount] = React.useState(false);
-
-  const [myMemberships, setMyMemberships] = React.useState(false);
+  const [myMemberships, setMyMemberships] = React.useState([]);
 
   React.useEffect(() => {
-    (async function() {
-      const response = await Lbryio.call(
-        'account',
-        'status',
-        {
-          environment: stripeEnvironment,
-        },
-        'post'
-      );
-
-      if (response.charges_enabled) {
-        setHaveAlreadyConfirmedBankAccount(true);
-      }
-    })();
-
     (async function() {
       const response = await Lbryio.call(
         'membership',
@@ -119,7 +104,7 @@ const MembershipsPage = (props: Props) => {
 
       setMyMemberships(pledges);
     })();
-  }, [claimsById]);
+  }, []);
 
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -183,70 +168,7 @@ const MembershipsPage = (props: Props) => {
     push(url);
   }
 
-  let localMembershipPageUrl;
-  let remoteMembershipPageUrl;
-  if (activeChannelClaim) {
-    remoteMembershipPageUrl = `${URL}${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}?view=membership`;
-    localMembershipPageUrl = `${formatLbryUrlForWeb(activeChannelClaim.canonical_url)}?view=membership`;
-  }
 
-  const myMembershipPage = (
-    <div className="my-membership__div">
-      <h1 style={{ fontSize: '20px', marginTop: '25px', marginBottom: '14px' }}>Membership Page</h1>
-
-      <ChannelSelector hideAnon style={{ marginBottom: '17px' }} />
-
-      <Button
-        button="primary"
-        className="membership_button"
-        label={__('View your membership page')}
-        icon={ICONS.UPGRADE}
-        navigate={`${localMembershipPageUrl}`}
-      />
-
-      <h1 style={{ marginTop: '10px' }}>You can also click the button below to copy your membership page url</h1>
-
-      <CopyableText className="membership-page__copy-button" primaryButton copyable={remoteMembershipPageUrl} snackMessage={__('Page location copied')} style={{ maxWidth: '535px', marginTop: '5px' }} />
-
-      <h1 style={{ fontSize: '20px', marginTop: '25px' }}>Received Funds</h1>
-
-      <h1 style={{ marginTop: '10px' }}> You currently have 0 supporters </h1>
-
-      <h1 style={{ marginTop: '10px' }}> Your estimated monthly income is currently $0 </h1>
-
-      <h1 style={{ marginTop: '10px' }}> You have received $0 total from your supporters</h1>
-
-      <h1 style={{ marginTop: '10px' }}> You do not any withdrawable funds </h1>
-
-      <div className="bank-account-information__div" style={{ marginTop: '33px' }}>
-        <h1 style={{ fontSize: '20px' }}>Bank Account Status</h1>
-        <div className="bank-account-status__div" style={{ marginTop: '15px' }}>
-          {!haveAlreadyConfirmedBankAccount && (
-            <>
-              <h1>
-                To be able to begin receiving payments you must connect a Bank Account first
-              </h1>
-              <Button
-                button="primary"
-                className="membership_button"
-                label={__('Connect a bank account')}
-                icon={ICONS.FINANCE}
-                navigate={'$/settings/tip_account'}
-                style={{ maxWidth: '254px' }}
-              />
-            </>
-          )}
-          {haveAlreadyConfirmedBankAccount && (
-            <><h1>
-              Congratulations, you have successfully linked your bank account and can receive tips and memberships
-            </h1></>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
-  const createTiers = (<></>);
 
   return (
     <>
@@ -261,10 +183,10 @@ const MembershipsPage = (props: Props) => {
           <TabPanels>
             {/* My Memberships panel */}
             <TabPanel>
-              {myMembershipPage}
+              <CreatorMembershipsTab />
             </TabPanel>
             <TabPanel>
-              {createTiers}
+              <CreateTiersTab />
             </TabPanel>
             {/** Your Supporters **/}
             <TabPanel>
