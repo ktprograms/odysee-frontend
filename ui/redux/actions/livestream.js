@@ -117,7 +117,6 @@ const findActiveStreams = async (
 export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: Dispatch) => {
   try {
     const { channelStatus, channelData } = await fetchLiveChannel(channelId);
-    
 
     if (channelStatus === LiveStatus.NOT_LIVE) {
       dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
